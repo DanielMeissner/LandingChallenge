@@ -45,7 +45,7 @@
 			<input>
 				<pref-width>100</pref-width>
 				<halign>left</halign>
-				<property>/sim/addons/landing-challenge/airport</property>
+				<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/airport</property>
 				<label>Challenge Airport ICAO</label>
 				<binding>
 					<command>dialog-apply</command>
@@ -56,7 +56,7 @@
             <input>
 				<pref-width>100</pref-width>
 				<halign>left</halign>
-				<property>/sim/addons/landing-challenge/runway</property>
+				<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/runway</property>
 				<label>Runway</label>
 				<binding>
 					<command>dialog-apply</command>
@@ -67,7 +67,7 @@
             <input>
 				<pref-width>100</pref-width>
 				<halign>left</halign>
-				<property>/sim/addons/landing-challenge/target-dist-m</property>
+				<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/target-dist-m</property>
 				<label>Target Distance</label>
 				<binding>
 					<command>dialog-apply</command>
@@ -77,7 +77,8 @@
         <button>
             <legend>Apply</legend>
             <binding>
-                <command>dialog-apply</command>
+                <command>nasal</command>
+                <script>LDG.challenge.setupChallenge();</script>
             </binding>
         </button>
     </group>

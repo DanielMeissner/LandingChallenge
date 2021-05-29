@@ -31,9 +31,11 @@ along with FlightGear.  If not, see <http://www.gnu.org/licenses/>.
             <org.flightgear.addons.landing-challenge>
                 <addon-devel>
                     <airport type="string">EDHE</airport>
-                    <runway type="string">27</runway>
+                    <runway type="string">09</runway>
                     <target-dist-m type="int">90</target-dist-m>
                     <markings-offset-m type="int">0.5</markings-offset-m>
+                    <landed>0</landed>
+                    <altTrig>0</altTrig>
                 </addon-devel>
             </org.flightgear.addons.landing-challenge>
         </by-id>
