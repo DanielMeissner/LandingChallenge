@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PropertyList>
+    <meta>
+        <file-type type="string">FlightGear add-on metadata</file-type>
+        <format-version type="int">1</format-version>
+    </meta>
+
+    <addon>
+        <identifier type="string">org.flightgear.addons.landing-challenge</identifier>
+        <name type="string">Landing Challenge Tool</name>
+        <version type="string">0.0.1</version>
+
+        <authors>
+            <author>
+                <name type="string">Daniel Meissner</name>
+                <email type="string"></email>
+                <url type="string"></url>
+            </author>
+        </authors>
+
+        <maintainers>
+            <maintainer>
+                <name type="string">FlightGear developers</name>
+                <url type="string">
+                    https://sourceforge.net/p/flightgear/mailman/flightgear-devel/
+                </url>
+            </maintainer>
+        </maintainers>
+
+        <short-description type="string">
+            Sets up a landing challenge for target practice and provides ratings of attempts.
+        </short-description>
+
+        <long-description type="string">
+            Sets up a landing challenge for target practice and provides ratings of attempts.
+        </long-description>
+
+        <license>
+            <designation type="string">
+                GNU GPL version 2 or later
+            </designation>
+            <url type="string">
+                https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+            </url>
+        </license>
+
+        <min-FG-version type="string">2017.4.0</min-FG-version>
+        <max-FG-version type="string">none</max-FG-version>
+
+        <urls>
+            <home-page type="string">
+                
+            </home-page>
+
+            <download type="string">
+                
+            </download>
+
+            <support type="string">
+                
+            </support>
+
+            <code-repository type="string">
+                
+            </code-repository>
+        </urls>
+
+        <tags>
+            <tag type="string">landing</tag>
+            <tag type="string">training</tag>
+            <tag type="string">challenge</tag>
+            <tag type="string">multiplayer</tag>
+        </tags>
+    </addon>
+</PropertyList>

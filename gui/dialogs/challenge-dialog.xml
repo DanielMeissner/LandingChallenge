@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<PropertyList>
+	<name>challenge-dlg</name>
+    <layout>vbox</layout>
+	<pref-width>180</pref-width>
+	<color>
+		<red>0.3</red>
+		<green>0.6</green>
+		<blue>0.6</blue>
+		<alpha>0.9</alpha>
+	</color>	
+    <group>
+		<layout>hbox</layout>
+		<empty>
+			<stretch>1</stretch>
+		</empty>
+		<text>
+			<label>Set up a Landing Challenge</label>
+		</text>
+		<empty>
+			<stretch>1</stretch>
+		</empty>
+		<button>
+			<color>
+				<red>0.5</red>
+				<green>0.5</green>
+				<blue>0.5</blue>
+				<alpha>0.8</alpha>
+			</color>	
+			<pref-width>16</pref-width>
+			<pref-height>16</pref-height>
+			<legend>X</legend>
+			<keynum>27</keynum>
+			<border>2</border>
+			<binding>
+				<command>dialog-close</command>
+			</binding>
+		</button>
+	</group>
+    <hrule />
+	<group>
+		<layout>vbox</layout>
+		<valign>top</valign>
+			<input>
+				<pref-width>100</pref-width>
+				<halign>left</halign>
+				<property>/sim/addons/landing-challenge/airport</property>
+				<label>Challenge Airport ICAO</label>
+				<binding>
+					<command>dialog-apply</command>
+				</binding>
+				<live type="bool">true</live>
+			</input>
+            
+            <input>
+				<pref-width>100</pref-width>
+				<halign>left</halign>
+				<property>/sim/addons/landing-challenge/runway</property>
+				<label>Runway</label>
+				<binding>
+					<command>dialog-apply</command>
+				</binding>
+				<live type="bool">true</live>
+			</input>
+            
+            <input>
+				<pref-width>100</pref-width>
+				<halign>left</halign>
+				<property>/sim/addons/landing-challenge/target-dist-m</property>
+				<label>Target Distance</label>
+				<binding>
+					<command>dialog-apply</command>
+				</binding>
+				<live type="bool">true</live>
+			</input>
+        <button>
+            <legend>Apply</legend>
+            <binding>
+                <command>dialog-apply</command>
+            </binding>
+        </button>
+    </group>
+</PropertyList>
