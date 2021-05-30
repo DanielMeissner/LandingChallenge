@@ -46,8 +46,16 @@
                 </text>
                 <radio>
                     <halign>left</halign>
-                    <label>Just flying, display ratings</label>
-                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/mode-justfly</property>
+                    <label>Off</label>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-off</property>
+                    <binding>
+                        <command>dialog-apply</command>
+                    </binding>
+                </radio>
+                <radio>
+                    <halign>left</halign>
+                    <label>Just flying, display ratings on touchdown</label>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-justfly</property>
                     <binding>
                         <command>dialog-apply</command>
                     </binding>
@@ -55,7 +63,7 @@
                 <radio>
                     <halign>left</halign>
                     <label>GA Precision Landing Competition</label>
-                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/mode-ga-competition</property>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-ga-competition</property>
                     <binding>
                         <command>dialog-apply</command>
                     </binding>
@@ -63,7 +71,7 @@
                 <radio>
                     <halign>left</halign>
                     <label>ILS Approach Training</label>
-                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/mode-ils-training</property>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-ils-training</property>
                     <binding>
                         <command>dialog-apply</command>
                     </binding>
@@ -78,9 +86,13 @@
                     <halign>left</halign>
                     <label>Setup Runway:</label>
                 </text>
-                <airport-list>
-                    
+                <text>
                     <halign>left</halign>
+                    <label>Select Airport:</label>
+                </text>
+                <airport-list>
+                    <pref-height>200</pref-height>
+                    <halign>fill</halign>
                     <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/airport</property>
                     
                     <binding>
@@ -119,7 +131,7 @@
             <valign>top</valign>
             <text>
                 <halign>left</halign>
-                <label>Configure target markings:</label>
+                <label>Configure target markings for GA Competition Flying:</label>
             </text>
             
             <checkbox>
@@ -127,7 +139,11 @@
                 <label>TDZ Cones</label>
                 <property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/render-cones</property>
             </checkbox>
-            
+            <checkbox>
+                <halign>left</halign>
+                <label>2m Obstacle</label>
+                <property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/render-obstacle</property>
+            </checkbox>
             <checkbox>
                 <halign>left</halign>
                 <label>Chalk markings</label>
