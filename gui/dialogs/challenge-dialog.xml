@@ -1,84 +1,216 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <PropertyList>
-	<name>challenge-dlg</name>
+    <name>challenge-dlg</name>
     <layout>vbox</layout>
-	<pref-width>180</pref-width>
-	<color>
-		<red>0.3</red>
-		<green>0.6</green>
-		<blue>0.6</blue>
-		<alpha>0.9</alpha>
-	</color>	
+    <pref-width>800</pref-width>
     <group>
-		<layout>hbox</layout>
-		<empty>
-			<stretch>1</stretch>
-		</empty>
-		<text>
-			<label>Set up a Landing Challenge</label>
-		</text>
-		<empty>
-			<stretch>1</stretch>
-		</empty>
-		<button>
-			<color>
-				<red>0.5</red>
-				<green>0.5</green>
-				<blue>0.5</blue>
-				<alpha>0.8</alpha>
-			</color>	
-			<pref-width>16</pref-width>
-			<pref-height>16</pref-height>
-			<legend>X</legend>
-			<keynum>27</keynum>
-			<border>2</border>
-			<binding>
-				<command>dialog-close</command>
-			</binding>
-		</button>
-	</group>
+        <!-- header bar -->
+        <layout>hbox</layout>
+        <empty>
+            <stretch>1</stretch>
+        </empty>
+        <text>
+            <label>Set up a Landing Challenge</label>
+        </text>
+        <empty>
+            <stretch>1</stretch>
+        </empty>
+        <button>
+            <pref-width>16</pref-width>
+            <pref-height>16</pref-height>
+            <legend>X</legend>
+            <keynum>27</keynum>
+            <border>2</border>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+    </group>
     <hrule />
-	<group>
-		<layout>vbox</layout>
-		<valign>top</valign>
-			<input>
-				<pref-width>100</pref-width>
-				<halign>left</halign>
-				<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/airport</property>
-				<label>Challenge Airport ICAO</label>
-				<binding>
-					<command>dialog-apply</command>
-				</binding>
-				<live type="bool">true</live>
-			</input>
+    <group>
+        <layout>hbox</layout>
+        <valign>top</valign>
+        <group>
+            <!-- left hand side -->
+            <layout>vbox</layout>
+            <valign>top</valign>
             
-            <input>
-				<pref-width>100</pref-width>
-				<halign>left</halign>
-				<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/runway</property>
-				<label>Runway</label>
-				<binding>
-					<command>dialog-apply</command>
-				</binding>
-				<live type="bool">true</live>
-			</input>
+            <group>
+                <!-- general mode selection -->
+                <layout>vbox</layout>
+                <valign>top</valign>
+                <text>
+                    <halign>left</halign>
+                    <label>Select mode:</label>
+                </text>
+                <radio>
+                    <halign>left</halign>
+                    <label>Just flying, display ratings</label>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/mode-justfly</property>
+                    <binding>
+                        <command>dialog-apply</command>
+                    </binding>
+                </radio>
+                <radio>
+                    <halign>left</halign>
+                    <label>GA Precision Landing Competition</label>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/mode-ga-competition</property>
+                    <binding>
+                        <command>dialog-apply</command>
+                    </binding>
+                </radio>
+                <radio>
+                    <halign>left</halign>
+                    <label>ILS Approach Training</label>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/mode-ils-training</property>
+                    <binding>
+                        <command>dialog-apply</command>
+                    </binding>
+                </radio>
+            </group>
+            <hrule />
+            <group>
+                <!-- runway setup -->
+                <layout>vbox</layout>
+                <valign>top</valign>
+                <text>
+                    <halign>left</halign>
+                    <label>Setup Runway:</label>
+                </text>
+                <airport-list>
+                    
+                    <halign>left</halign>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/airport</property>
+                    
+                    <binding>
+                        <command>dialog-apply</command>
+                    </binding>
+                </airport-list>
+                
+                <input>
+                    <pref-width>100</pref-width>
+                    <halign>left</halign>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/runway</property>
+                    <label>Runway</label>
+                    <binding>
+                        <command>dialog-apply</command>
+                    </binding>
+                    <live type="bool">true</live>
+                </input>
+                
+                <input>
+                    <pref-width>100</pref-width>
+                    <halign>left</halign>
+                    <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/target-dist-m</property>
+                    <label>Target Distance from Threshold</label>
+                    <binding>
+                        <command>dialog-apply</command>
+                    </binding>
+                    <live type="bool">true</live>
+                </input>
+            </group>
+        </group>
+        <vrule />
+        <group>
+            <!-- right hand side -->
+            <!-- configure markings and announcements -->
+            <layout>vbox</layout>
+            <valign>top</valign>
+            <text>
+                <halign>left</halign>
+                <label>Configure target markings:</label>
+            </text>
             
+            <checkbox>
+                <halign>left</halign>
+                <label>TDZ Cones</label>
+                <property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/render-cones</property>
+            </checkbox>
+            
+            <checkbox>
+                <halign>left</halign>
+                <label>Chalk markings</label>
+                <property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/render-chalkmarkings</property>
+            </checkbox>
             <input>
-				<pref-width>100</pref-width>
-				<halign>left</halign>
-				<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/target-dist-m</property>
-				<label>Target Distance</label>
-				<binding>
-					<command>dialog-apply</command>
-				</binding>
-				<live type="bool">true</live>
-			</input>
+                <pref-width>100</pref-width>
+                <halign>left</halign>
+                <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/chalkmarkings-offset-m</property>
+                <label>Chalk markings elevation offset (m)</label>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <live type="bool">true</live>
+            </input>
+            <input>
+                <pref-width>100</pref-width>
+                <halign>left</halign>
+                <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/chalkmakrings-pitch-deg</property>
+                <label>Chalk markings pitch (deg)</label>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <live type="bool">true</live>
+            </input>
+            <hrule />
+            <text>
+                <halign>left</halign>
+                <label>Display results:</label>
+            </text>
+            <checkbox>
+                <halign>left</halign>
+                <label>via Message</label>
+                <property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/message</property>
+            </checkbox>
+            <checkbox>
+                <halign>left</halign>
+                <label>Detailed Popup</label>
+                <property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/message-popup</property>
+            </checkbox>
+            
+            <checkbox>
+                <halign>left</halign>
+                <label>Announce landing results on Multiplayer Chat</label>
+                <property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/announce-mp</property>
+            </checkbox>
+        </group>
+    </group>
+    <hrule />
+    <group>
+        <!-- buttons -->
+        <layout>hbox</layout>
+        <valign>top</valign>
+        <button>
+            <legend>Ok</legend>
+            <binding>
+                <command>nasal</command>
+                <script>LDG.challenge.setupChallenge();</script>
+            </binding>
+            <binding>
+                <command>dialog-apply</command>
+            </binding>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
         <button>
             <legend>Apply</legend>
             <binding>
                 <command>nasal</command>
                 <script>LDG.challenge.setupChallenge();</script>
+            </binding>
+        </button>
+        <button>
+            <legend>Cancel</legend>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+        <button>
+            <legend>Remove Challenge</legend>
+            <binding>
+                <command>dialog-close</command>
             </binding>
         </button>
     </group>
