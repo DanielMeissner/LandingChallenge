@@ -82,6 +82,10 @@ var landingChallenge = {
             gforce: 0,
             fpm: 0,
             landingPos: nil,
+            bankAngle: 0,
+            sideslipAngle: 0,
+            overshoot: 0,
+            offcenter: 0,
             
             # setting things up...
             # reference to addon base path
@@ -213,30 +217,34 @@ var landingChallenge = {
         # setting up landed listener
         var landed = setlistener(me.landedProp, func {
             if(me.landedProp.getBoolValue() and me.altTrigProp.getBoolValue()) { 
-                me.altTrigProp.setValue(0);
-                
-                me.gforce = getprop("accelerations/pilot-gdamped");
-                me.fpm = getprop("instrumentation/vertical-speed-indicator/indicated-speed-fpm");
-                me.landingPos = geo.aircraft_position();
-                
+                me.altTrigProp.setValue(0);                
+                me.compileLandingData();
                 me.printLandingMessage();
             } 
         }); 
     },
     
-    printLandingMessage: func() {
-        var f = me.fpm * -1; # get fpm with no (-)
+    compileLandingData: func() {
+        me.gforce = getprop("accelerations/pilot-gdamped");
+        me.fpm = getprop("instrumentation/vertical-speed-indicator/indicated-speed-fpm");
+        me.landingPos = geo.aircraft_position();
+        
         var absdist = me.landingPos.distance_to(me.tgt_pos);
         
         var crs = me.landingPos.course_to(me.tgt_pos);
         crs -= me.tgt_rwy.heading;
         
-        var overshoot = -absdist * math.cos(D2R*crs); 
-        var offcenter = absdist * math.sin(D2R*crs);
+        me.overshoot = -absdist * math.cos(D2R*crs); 
+        me.offcenter = absdist * math.sin(D2R*crs);
         
-        var msg = "Landed! Fpm: " ~ sprintf("%.3f", f) ~ "; G-Force: " ~ sprintf("%.1f", me.gforce) ~ "; Distance to target: " ~ sprintf("%.1f", overshoot) ~ "; Distance from Centerline: " ~ sprintf("%.1f", offcenter);
+        me.bankAngle = getprop("/orientation/roll-deg");
+        me.sideslipAngle = getprop("/orientation/side-slip-deg");        
+    },
+    
+    printLandingMessage: func() {
+        var msg = "Landed! Fpm: " ~ sprintf("%.3f", me.fpm) ~ "; G-Force: " ~ sprintf("%.1f", me.gforce) ~ "; Bank Angle: " ~ sprintf("%.1f", me.bankAngle) ~ "; Side-Slip Angle: " ~ sprintf("%.1f", me.sideslipAngle) ~ "; Distance to target: " ~ sprintf("%.1f", me.overshoot) ~ "; Distance from Centerline: " ~ sprintf("%.1f", me.offcenter);
         
-        #me.window.write(msg);
+        me.window.write(msg);
         print("Last Landing: " ~ msg); 
         # if (SHARE_RATE_MP) send_mp_msg(msg); # send mp message if allowed
     },
