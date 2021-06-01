@@ -36,6 +36,14 @@ along with FlightGear.  If not, see <http://www.gnu.org/licenses/>.
                     <markings-offset-m type="int">0.5</markings-offset-m>
                     <landed>0</landed>
                     <altTrig>0</altTrig>
+                    <landing-data>
+                        <g-force type ="string"></g-force>
+                        <fpm type = "string"></fpm>
+                        <overshoot type="string"></overshoot>
+                        <offcenter type="string"></offcenter>
+                        <bank-angle type="string"></bank-angle>
+                        <slip-angle type="string"></slip-angle>
+                    </landing-data>                
                 </addon-devel>
             </org.flightgear.addons.landing-challenge>
         </by-id>

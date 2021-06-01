@@ -83,7 +83,7 @@ var landingChallenge = {
             fpm: 0,
             landingPos: nil,
             bankAngle: 0,
-            sideslipAngle: 0,
+            slipAngle: 0,
             overshoot: 0,
             offcenter: 0,
             
@@ -214,7 +214,6 @@ var landingChallenge = {
                 me.altTrigProp.setValue(0);                
                 me.compileLandingData();
                 me.printLandingMessage();
-                fgcommand("show-landing-notification-popup");
             } 
         }); 
     },
@@ -233,14 +232,23 @@ var landingChallenge = {
         me.offcenter = absdist * math.sin(D2R*crs);
         
         me.bankAngle = getprop("/orientation/roll-deg");
-        me.sideslipAngle = getprop("/orientation/side-slip-deg");        
+        me.slipAngle = getprop("/orientation/side-slip-deg");
+        
+        #output to landing properties
+        setprop(me.PROP_PATH~"landing-data/g-force", sprintf("%.1f", me.gforce));
+        setprop(me.PROP_PATH~"landing-data/fpm", sprintf("%.1f", me.fpm));
+        setprop(me.PROP_PATH~"landing-data/overshoot", sprintf("%.1f", me.overshoot));
+        setprop(me.PROP_PATH~"landing-data/offcenter", sprintf("%.1f", me.offcenter));
+        setprop(me.PROP_PATH~"landing-data/bank-angle", sprintf("%.1f", me.bankAngle));
+        setprop(me.PROP_PATH~"landing-data/slip-angle", sprintf("%.1f", me.slipAngle));
     },
     
     printLandingMessage: func() {
-        var msg = "Landed! Fpm: " ~ sprintf("%.3f", me.fpm) ~ "; G-Force: " ~ sprintf("%.1f", me.gforce) ~ "; Bank Angle: " ~ sprintf("%.1f", me.bankAngle) ~ "; Side-Slip Angle: " ~ sprintf("%.1f", me.sideslipAngle) ~ "; Distance to target: " ~ sprintf("%.1f", me.overshoot) ~ "; Distance from Centerline: " ~ sprintf("%.1f", me.offcenter);
+        var msg = "Landed! Fpm: " ~ sprintf("%.3f", me.fpm) ~ "; G-Force: " ~ sprintf("%.1f", me.gforce) ~ "; Bank Angle: " ~ sprintf("%.1f", me.bankAngle) ~ "; Side-Slip Angle: " ~ sprintf("%.1f", me.slipAngle) ~ "; Distance to target: " ~ sprintf("%.1f", me.overshoot) ~ "; Distance from Centerline: " ~ sprintf("%.1f", me.offcenter);
         
         me.window.write(msg);
-        print("Last Landing: " ~ msg); 
+        print("Last Landing: " ~ msg);
+        fgcommand("show-landing-notification-popup");
         # if (SHARE_RATE_MP) send_mp_msg(msg); # send mp message if allowed
     },
 }; # landingChallenge Class
