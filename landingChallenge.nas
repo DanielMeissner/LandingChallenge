@@ -220,6 +220,7 @@ var landingChallenge = {
                 me.altTrigProp.setValue(0);                
                 me.compileLandingData();
                 me.printLandingMessage();
+                fgcommand("show-landing-notification-popup");
             } 
         }); 
     },

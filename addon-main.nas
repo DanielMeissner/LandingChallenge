@@ -61,5 +61,6 @@ var main = func(addon) {
   logprint(LOG_INFO, "Landing-Challenge addon initialized from path ", addon.basePath);
 
   io.load_nasal(addon.basePath ~ "/landingChallenge.nas", namespace);
+  io.load_nasal(addon.basePath ~ "/LandingNotification.nas", namespace);
   globals[namespace].addonBasePath = addon.basePath;
 }
