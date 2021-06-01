@@ -120,9 +120,6 @@ var landingChallenge = {
     },
     
     # interface
-    get_tgt_pos: func() {
-        return tgt_pos;
-    },
     
     setupRunway: func() {
         var aptName = getprop(me.PROP_PATH ~ "airport");
@@ -180,9 +177,6 @@ var landingChallenge = {
             
         }
 	},
-	
-	#return tgt_pos{
-    #},
     
     setupAirplane: func() {
         #hard-coded, for now
