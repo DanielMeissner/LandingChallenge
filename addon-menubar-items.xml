@@ -54,7 +54,7 @@
                     <command>show-landing-notification-popup</command>
                     <id>org.flightgear.addons.landing-challenge</id>
                 </binding>
-            </item> 
+            </item>
         </menu>
     </menubar-items>
 </PropertyList>

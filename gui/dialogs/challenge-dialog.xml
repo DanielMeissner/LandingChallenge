@@ -3,6 +3,36 @@
 <PropertyList>
     <name>challenge-dlg</name>
     <layout>vbox</layout>
+    
+    <nasal>
+        <open>
+            var syncRadioButtons = func() {
+                var props = ["off", "justfly", "ga-competition", "ils-training"]; 
+                foreach (var m; props) {
+                    var p = "/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/dialog/mode-"~ m;
+                    var v = "/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-"~ m;
+                    setprop(p, getprop(v));
+                    print("setmode" ~ getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-"~ m));
+                }
+            }
+            
+            var setMode = func(newMode) {
+                var props = ["off", "justfly", "ga-competition", "ils-training"]; 
+                print(newMode ~ " clicked");
+                foreach (var m; props) {
+                    if( (getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-"~ m) == 1) and (m == newMode) ) {
+                        continue;
+                    }
+                    setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-"~ m, 0);
+                    
+                }
+                #syncRadioButtons();
+            }
+            #syncRadioButtons();
+        </open>
+    </nasal>
+    
+    
     <pref-width>800</pref-width>
     <group>
         <!-- header bar -->
@@ -49,32 +79,64 @@
                     <label>Off</label>
                     <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-off</property>
                     <binding>
-                        <command>dialog-apply</command>
+                        <command>property-cycle</command>
+                        <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-off</property>
+                        <value>0</value>
+                        <value>1</value>
                     </binding>
+                    <binding>
+                        <command>nasal</command>
+                        <script>setMode("off")</script>
+                    </binding>
+                     <live>true</live>
                 </radio>
                 <radio>
                     <halign>left</halign>
                     <label>Just flying, display ratings on touchdown</label>
                     <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-justfly</property>
                     <binding>
-                        <command>dialog-apply</command>
+                        <command>property-cycle</command>
+                        <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-justfly</property>
+                        <value>0</value>
+                        <value>1</value>
                     </binding>
+                    <binding>
+                        <command>nasal</command>
+                        <script>setMode("justfly")</script>
+                    </binding>
+                     <live>true</live>
                 </radio>
                 <radio>
                     <halign>left</halign>
                     <label>GA Precision Landing Competition</label>
                     <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-ga-competition</property>
                     <binding>
-                        <command>dialog-apply</command>
+                        <command>property-cycle</command>
+                        <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-ga-competition</property>
+                        <value>0</value>
+                        <value>1</value>
                     </binding>
+                    <binding>
+                        <command>nasal</command>
+                        <script>setMode("ga-competition")</script>
+                    </binding>
+                     <live>true</live>
                 </radio>
                 <radio>
                     <halign>left</halign>
                     <label>ILS Approach Training</label>
                     <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-ils-training</property>
                     <binding>
-                        <command>dialog-apply</command>
+                        <command>property-cycle</command>
+                        <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-ils-training</property>
+                        <value>0</value>
+                        <value>1</value>
                     </binding>
+                    <binding>
+                        <command>nasal</command>
+                        <script>setMode("ils-training")</script>
+                    </binding>
+                     <live>true</live>
                 </radio>
             </group>
             <hrule />

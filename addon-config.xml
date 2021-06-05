@@ -43,7 +43,13 @@ along with FlightGear.  If not, see <http://www.gnu.org/licenses/>.
                         <offcenter type="string"></offcenter>
                         <bank-angle type="string"></bank-angle>
                         <slip-angle type="string"></slip-angle>
-                    </landing-data>                
+                    </landing-data>
+                    <modes>
+                        <mode-off type="int">1</mode-off>
+                        <mode-justfly type="int">0</mode-justfly>
+                        <mode-ga-competition type="int">0</mode-ga-competition>
+                        <mode-ils-training type="int">0</mode-ils-training>
+                    </modes>
                 </addon-devel>
             </org.flightgear.addons.landing-challenge>
         </by-id>
