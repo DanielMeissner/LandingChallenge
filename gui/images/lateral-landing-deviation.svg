@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="a" version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+	<g>
+		<rect x="5" width="55" height="64" fill="#070707"/>
+		<path d="m32.5 0v64" fill="none" stroke="#fff" stroke-dasharray="6,6"/>
+		<g fill="#fff" opacity=".8">
+			<ellipse cx="32.5" cy="32" rx="3" ry="13.5" opacity="1"/>
+			<rect x="23" y="42" width="19" height="3" opacity="1"/>
+			<rect x="11" y="27" width="43" height="6" opacity="1"/>
+		</g>
+	</g>
+</svg>
