@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="64" height="64" version="1.1" viewBox="0 0 16.9 16.9" xmlns="http://www.w3.org/2000/svg">
+	<circle id="handle" cx="8.47" cy="282" r="2.5" fill="black"/>
+	<rect id="block" x="2.78" y="288" width="11.4" height="9.26" fill="black"/>
+	<rect id="joint" x="7.54" y="282" width="1.85" height="6.88" fill="black"/>
+</svg>
