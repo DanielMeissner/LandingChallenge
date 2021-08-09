@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg width="64" height="64" version="1.1" viewBox="0 0 16.9 16.9" xmlns="http://www.w3.org/2000/svg">
-	<circle id="handle" cx="8.47" cy="282" r="2.5" fill="black"/>
-	<rect id="block" x="2.78" y="288" width="11.4" height="9.26" fill="black"/>
-	<rect id="joint" x="7.54" y="282" width="1.85" height="6.88" fill="black"/>
+	<rect id="weight" x="2.64" y="8.45" width="11.6" height="8.45" style="paint-order:markers fill stroke"/>
+	<rect id="joint" x="7.13" y="4.22" width="2.64" height="6.07" style="paint-order:markers fill stroke"/>
+	<circle id="handle" cx="8.45" cy="4.68" r="2.64" style="paint-order:markers fill stroke"/>
+	<text x="5.680954" y="15.460092" fill="#ffffff" font-family="sans-serif" font-size="7.39px" letter-spacing="0px" stroke="#ffffff" stroke-width=".185" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5.680954" y="15.460092" fill="#ffffff" stroke="#ffffff" stroke-width=".185">G</tspan></text>
 </svg>

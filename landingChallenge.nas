@@ -114,6 +114,7 @@ var landingChallenge = {
     # destructor
     del: func() {
         foreach (var i; landingChallenge.instances) {
+            i.removeModels();
             i.cleanup();
         }
         landingChallenge.instances = [];

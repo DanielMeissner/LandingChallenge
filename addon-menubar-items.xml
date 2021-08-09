@@ -49,7 +49,7 @@
                 </binding>
             </item> 
             <item>
-                <label>debug trigger popup</label>
+                <label>Debug trigger popup</label>
                 <binding>
                     <command>show-landing-notification-popup</command>
                     <id>org.flightgear.addons.landing-challenge</id>

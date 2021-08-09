@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="64" height="64" version="1.1" viewBox="0 0 16.9 16.9" xmlns="http://www.w3.org/2000/svg">
+	<g id="vsi-clock" stroke="#000">
+		<path id="border" transform="rotate(45)" d="m21.3-0.838a8.47 8.47 0 0 1-5.23 7.82 8.47 8.47 0 0 1-9.23-1.84 8.47 8.47 0 0 1-1.84-9.23 8.47 8.47 0 0 1 7.82-5.23v8.47z" fill="#fff" stroke-linecap="round" stroke-width=".529" style="paint-order:fill markers stroke"/>
+		<path d="m1.06 8.47h1.85" fill="none" stroke-width=".529"/>
+		<path id="mark-5-positive" d="m5.03 3.44-1.06-1.06" fill="none" stroke-width=".529"/>
+		<path id="mark-5-negative" d="m3.97 14.6 1.06-1.06" fill="none" stroke-width=".529"/>
+		<path id="mark-10-positive" d="m10.1 0v1.32" fill="none" stroke-width=".529" style="paint-order:markers fill stroke"/>
+		<path id="mark-10-negative" d="m10.1 15.6v1.32" fill="none" stroke-width=".529"/>
+	</g>
+	<g id="needle">
+		<path id="needle-visible" d="m9.79 7.94-6.35 0.529 6.35 0.529z" stroke="#000" stroke-linejoin="round" stroke-width=".265"/>
+		<path id="needle-invisible" d="m9.79 7.94v1.06l7.14-0.529z" fill="none"/>
+	</g>
+</svg>

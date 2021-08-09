@@ -288,7 +288,7 @@
         <button>
             <legend>Remove Challenge</legend>
             <binding>
-                <command>dialog-close</command>
+                <command>LDG.challenge.del();</command>
             </binding>
         </button>
     </group>

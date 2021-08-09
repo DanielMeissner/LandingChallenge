@@ -9,13 +9,20 @@
     <addon>
         <identifier type="string">org.flightgear.addons.landing-challenge</identifier>
         <name type="string">Landing Challenge Tool</name>
-        <version type="string">0.0.1</version>
+        <version type="string">1.0.0</version>
 
         <authors>
             <author>
                 <name type="string">Daniel Meissner</name>
                 <email type="string"></email>
                 <url type="string"></url>
+            </author>
+        </authors>
+        <authors>
+            <author>
+                <name type="string">TheFGFSEagle</name>
+                <email type="string">programmer.anonymous@yandex.com</email>
+                <url type="string">https://github.com/TheFGFSEagle</url>
             </author>
         </authors>
 
@@ -50,19 +57,19 @@
 
         <urls>
             <home-page type="string">
-                
+                https://github.com/DanielMeissner/LandingChallenge
             </home-page>
 
             <download type="string">
-                
+                https://github.com/DanielMeissner/LandingChallenge
             </download>
 
             <support type="string">
-                
+                https://github.com/DanielMeissner/LandingChallenge/issues
             </support>
 
             <code-repository type="string">
-                
+                https://github.com/DanielMeissner/LandingChallenge
             </code-repository>
         </urls>
 
