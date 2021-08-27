@@ -18,7 +18,6 @@ var LandingNotification =
 
 		m._hideTimer = maketimer(m.SHOW_TIME, m, LandingNotification._hideTimeout);
 		m._hideTimer.singleShot = 1;
-		m._reportIndex = 0;
 
 		return m;
 	},
@@ -139,7 +138,6 @@ var LandingNotification =
 	_hideTimeout: func()
 	{
 		me.setBool("visible", 0);
-		me.del() # have to delete also on hiding else we get a white box instead of the popup after addon reload
 	}
 };
 
@@ -147,12 +145,10 @@ var landingNotificationCanvas = nil;
 
 var showLandingNotification = func() {
 	logprint(LOG_DEBUG, "Showing landing notification");
-	if (landingNotificationCanvas != nil) {
-		# we need to always delete the old popup and create a new one; else we get a white box instead of the popup
-		call(landingNotificationCanvas.del, nil, nil, var err = []);
+	if (landingNotificationCanvas == nil) {
+		landingNotificationCanvas = LandingNotification.new();
+		landingNotificationCanvas._createCanvas();
 	}
-	landingNotificationCanvas = LandingNotification.new();
-	landingNotificationCanvas._createCanvas();
 	landingNotificationCanvas._updateBounds();
 	landingNotificationCanvas.show();
 }
