@@ -49,18 +49,20 @@ var unload = func(addon) {
     #
     # Other resources should be freed by adding the corresponding code here,
     # e.g. myCanvas.del();
-    print("LandingChallenge unload()");
+    logprint(LOG_DEBUG, "Unloading landing challenge plugin");
     if (globals[namespace] != nil and globals[namespace]["LDG"] != nil) {
         var err=[];
         call(globals[namespace].LDG.del, [], err);
     }
-    
+    removecommand("show-landing-notification-popup");
+    removecommand("show-landing-data-dialog");
 }
 
 var main = func(addon) {
   logprint(LOG_INFO, "Landing-Challenge addon initialized from path ", addon.basePath);
 
   io.load_nasal(addon.basePath ~ "/landingChallenge.nas", namespace);
-  io.load_nasal(addon.basePath ~ "/LandingNotification.nas", namespace);
-  globals[namespace].addonBasePath = addon.basePath;
+  io.load_nasal(addon.basePath ~ "/landingNotification.nas", namespace);
+  io.load_nasal(addon.basePath ~ "/dataDialog.nas", namespace);
+   globals[namespace].addonBasePath = addon.basePath;
 }

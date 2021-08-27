@@ -24,15 +24,15 @@ var LandingNotification =
 	},
 
 	# Destructor
-	del: func
-	{
-		me.parents[1].del();
-		if( me["_canvas"] != nil )
+	del: func {
+		logprint(LOG_DEBUG, "Deleting LandingChallenge");
+		call(me.parents[1].del, nil, nil, var err = []);
+		if (me["_canvas"] != nil) {
 			me._canvas.del();
+		}
 	},
 
-	_createCanvas: func()
-	{
+	_createCanvas: func() {
 		var size = [
 			me.get("size[0]"),
 			me.get("size[1]")
@@ -87,10 +87,10 @@ var LandingNotification =
 
 	clicked: func() {
 		me.hideNow();
-		#fgcommand("show-landing-data-dialog");		
+		fgcommand("show-landing-data-dialog");		
 	},
 
- _updateBounds: func {
+ 	_updateBounds: func {
 		# the width of everything except the text
 		var extraWidth = me._warningIcon.get("size[0]") + me.MARGIN + (2 * me.SLICE);
 		var maxTextWidth = me.get("size[0]") - extraWidth;
@@ -139,20 +139,22 @@ var LandingNotification =
 	_hideTimeout: func()
 	{
 		me.setBool("visible", 0);
+		me.del() # have to delete also on hiding else we get a white box instead of the popup after addon reload
 	}
 };
 
 var landingNotificationCanvas = nil;
 
-var showLandingNotification = func()
-{
-		if (landingNotificationCanvas == nil) {
-				# create instance
-				landingNotificationCanvas = LandingNotification.new();
-				landingNotificationCanvas._createCanvas();
-		}
-		landingNotificationCanvas._updateBounds();
-		landingNotificationCanvas.show();
+var showLandingNotification = func() {
+	logprint(LOG_DEBUG, "Showing landing notification");
+	if (landingNotificationCanvas != nil) {
+		# we need to always delete the old popup and create a new one; else we get a white box instead of the popup
+		call(landingNotificationCanvas.del, nil, nil, var err = []);
+	}
+	landingNotificationCanvas = LandingNotification.new();
+	landingNotificationCanvas._createCanvas();
+	landingNotificationCanvas._updateBounds();
+	landingNotificationCanvas.show();
 }
 
 addcommand("show-landing-notification-popup", showLandingNotification);

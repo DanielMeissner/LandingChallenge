@@ -9,21 +9,21 @@
             var syncRadioButtons = func() {
                 var props = ["off", "justfly", "ga-competition", "ils-training"]; 
                 foreach (var m; props) {
-                    var p = "/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/dialog/mode-"~ m;
-                    var v = "/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-"~ m;
+                    var p = "/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/dialog/mode-" ~ m;
+                    var v = "/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-" ~ m;
                     setprop(p, getprop(v));
-                    print("setmode" ~ getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-"~ m));
+                    logprint(LOG_DEBUG, "Setting mode to " ~ getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-" ~  m));
                 }
             }
             
             var setMode = func(newMode) {
                 var props = ["off", "justfly", "ga-competition", "ils-training"]; 
-                print(newMode ~ " clicked");
+                logprint(LOG_DEBUG, newMode ~ " clicked");
                 foreach (var m; props) {
-                    if( (getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-"~ m) == 1) and (m == newMode) ) {
+                    if ((getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-"~ m) == 1) and (m == newMode)) {
                         continue;
                     }
-                    setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-"~ m, 0);
+                    setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/modes/mode-" ~ m, 0);
                     
                 }
                 #syncRadioButtons();
@@ -152,6 +152,17 @@
                     <halign>left</halign>
                     <label>Select Airport:</label>
                 </text>
+            <input>
+                <pref-width>100</pref-width>
+                <halign>left</halign>
+                <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/airport</property>
+                <label>Search for an airport</label>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <key>Enter</key>
+                <live type="bool">true</live>
+            </input>
                 <airport-list>
                     <pref-height>200</pref-height>
                     <halign>fill</halign>
@@ -160,6 +171,7 @@
                     <binding>
                         <command>dialog-apply</command>
                     </binding>
+                    <live type="bool">true</live>
                 </airport-list>
                 
                 <input>
@@ -224,14 +236,14 @@
             <input>
                 <pref-width>100</pref-width>
                 <halign>left</halign>
-                <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/chalkmakrings-pitch-deg</property>
-                <label>Chalk markings pitch (deg)</label>
+                <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/chalkmarkings-pitch-deg</property>
+                <label>Chalk markings pitch</label>
                 <binding>
                     <command>dialog-apply</command>
                 </binding>
                 <live type="bool">true</live>
             </input>
-            <hrule />
+            <hrule/>
             <text>
                 <halign>left</halign>
                 <label>Display results:</label>
