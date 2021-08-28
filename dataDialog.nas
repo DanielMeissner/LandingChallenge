@@ -13,7 +13,7 @@ var showLandingDataDialog = func() {
 	
 	deviationBox = canvas.VBoxLayout.new();
 	deviationImageGroup = root.createChild("group");
-	canvas.parsesvg(deviationImageGroup, "/mnt/DATEN/blender-2.83.0-linux64/2.83/datafiles/colormanagement/filmic/fgfs-addons/LandingChallenge/gui/images/threshold-deviation.svg");#addonBasePath ~ "/gui/images/threshold-deviation.svg");
+	canvas.parsesvg(deviationImageGroup, "[addon=org.flightgear.addons.landing-challenge]gui/images/threshold-deviation.svg");
 	
 	orientationPositionBox.addItem(deviationBox);
 	
