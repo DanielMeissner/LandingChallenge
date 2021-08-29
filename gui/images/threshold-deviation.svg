@@ -2,12 +2,14 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
 	<g id="runway" transform="matrix(1.16 0 0 1 -5.81 .00391)">
-		<rect id="asphalt" x="5" y="0" width="55" height="64" fill="#070707"/>
-		<path id="centerline" d="m32.5 0v64" fill="none" stroke="#fff" stroke-dasharray="6, 6"/>
+		<rect id="asphalt" x="5" y="0" width="55" height="64" style="fill: #000000; stroke: none;"/>
+		<path id="threshold" d="m0 32h64" style="fill: none; stroke-dasharray: 1, 2; stroke: #ffffff"/>
+		<path id="centerline" d="m32.5 0v64" style="fill: none; stroke-dasharray: 6, 6; stroke: #ffffff"/>
 	</g>
-	<g id="airplane" transform="matrix(.728 0 0 .794 8.34 6.6)" fill="#fff">
-		<ellipse id="body" cx="32.5" cy="32" rx="3" ry="13.5"/>
-		<rect id="elevator" x="23" y="42" width="19" height="3"/>
-		<rect id="wings" x="11" y="27" width="43" height="6"/>
+	<g id="airplane" transform="matrix(.728 0 0 .794 8.34 6.6)">
+		<circle id="planeCenter" cx="32" cy="32" r="1" style="fill: #ffff00"/>
+		<ellipse id="body" cx="32.5" cy="32" rx="3" ry="13.5" style="fill: #ff0000"/>
+		<rect id="elevator" x="23" y="42" width="19" height="3" style="fill: #ff0000"/>
+		<rect id="wings" x="11" y="27" width="43" height="6" style="fill: #ff0000"/>
 	</g>
 </svg>

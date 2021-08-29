@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+	<g transform="matrix(3.79 0 0 3.79 .803 -1062)">
+		<g id="airplane" transform="translate(4.45e-7,-4.23)">
+			<ellipse id="body" cx="8.47" cy="289" rx="6.83" ry="1.45" style="fill: #000000"/>
+			<path id="rudder" d="m11.9 288 1.06-3.18h1.59l-0.794 3.18z" style="fill: #000000"/>
+			<path id="front-gear" d="m5.56 290-1.06 2.12" style="fill: none; stroke-width: 0.529; stroke: #000000"/>
+			<path id="back-gear" d="m10.3 290 0.265 2.12" style="fill: none; stroke-width: 0.529; stroke: #000000"/>
+			<circle id="front-wheel" cx="4.37" cy="292" r=".661" style="fill: #000005"/>
+			<circle id="back-wheel" cx="10.6" cy="292" r=".661" style="fill: #000005"/>
+		</g>
+		<path id="arrow" d="m14.6 292v2.65h-9.26v2.38l-3.97-3.7 3.97-3.7v2.38z" style="fill: #000005; stroke-width: 0.265; stroke: #000000"/>
+	</g>
+</svg>

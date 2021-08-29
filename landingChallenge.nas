@@ -62,9 +62,12 @@ var LandingChallenge = {
 			},
 			
 			# members
-			#model references
+			# model references
 			cones: [],
 			chalkMarks: nil,
+			
+			# store landing message for later use
+			msg: "You didn't land yet !",
 			
 			gear_props: [],
 			landedProp: nil,
@@ -93,10 +96,10 @@ var LandingChallenge = {
 			addonBasePath: path,
 			
 			# props for landing and altitude trigger
-			landedProp: props.globals.getNode(me.PROP_PATH~"landed"),
-			altTrigProp: props.globals.getNode(me.PROP_PATH~"altTrig"),
+			landedProp: props.globals.getNode(me.PROP_PATH ~ "landed"),
+			altTrigProp: props.globals.getNode(me.PROP_PATH ~ "altTrig"),
 			
-			#the message window for in-game display
+			# the message window for in-game display
 			window: screen.window.new(10, 10, 3, 10), # create new window object. 750, 10 : Lower Right
 			
 		};
@@ -107,6 +110,7 @@ var LandingChallenge = {
 		obj.altTrigProp.initNode(0);
 		
 		obj.window.bg = [0, 0, 0, 0.5]; # black alpha .5 background
+		obj.window.fg = [1, 1, 1, 1];
 			
 		# behave like a real constructor and return yourself
 		return obj;
@@ -124,80 +128,107 @@ var LandingChallenge = {
 	# interface
 	
 	setupRunway: func() {
-		var aptName = getprop(me.PROP_PATH ~ "airport");
-		var rwyName = getprop(me.PROP_PATH ~ "runway");
-		me.tgt_dst = getprop(me.PROP_PATH ~ "target-dist-m");
-		
-		if (find("(", aptName) > -1) {
-			aptName = split("(", aptName)[-1];
-			aptName = split(")", aptName)[0];
-		}
+		# only place the models if GA dompetition mode is selected
+		if (getprop(me.PROP_PATH ~ "modes/mode-ga-competition")) {
+			var aptName = getprop(me.PROP_PATH ~ "airport");
+			var rwyName = getprop(me.PROP_PATH ~ "runway");
+			me.tgt_dst = getprop(me.PROP_PATH ~ "target-dist-m");
+			
+			# TODO: determine pitch at runtime. Also we shouldn't need an elevation offset if we applly the correct pitch.
+			var markingsElevationOffset = getprop(me.PROP_PATH ~ "chalkmarkings-offset-m");
+			var markingsPitch = getprop(me.PROP_PATH ~ "chalkmarkings-pitch-deg");
+			
+			var placeCones = getprop(me.PROP_PATH ~ "render-cones");
+			# TODO: create / find an obstacle model and place it in the scenery
+			var placeObstacle = getprop(me.PROP_PATH ~ "render-obstacle");
+			var placeChalkMarkings = getprop(me.PROP_PATH ~ "render-chalkmarkings");
+			
+			# If aptName contains a parenthese (thus more than the ICAO), get everything between the last pair of parentheses (the ICAO).
+			if (find("(", aptName) > -1) {
+				aptName = split("(", aptName)[-1];
+				aptName = split(")", aptName)[0];
+			}
 
-		# get information about selected airport
-		me.tgt_apt = airportinfo(aptName);
-		
-		if (me.tgt_apt != nil) {
-			# find selected runway
-			foreach (var r; keys(me.tgt_apt.runways)) {
-				var curr = me.tgt_apt.runways[r];
+			# Get information about the selected airport
+			me.tgt_apt = airportinfo(aptName);
+			
+			if (me.tgt_apt != nil) {
+				# Find selected runway
+				foreach (var r; keys(me.tgt_apt.runways)) {
+					var curr = me.tgt_apt.runways[r];
+					
+					if (me.tgt_apt.runways[r].id == rwyName) {
+						me.tgt_rwy = curr;
+						break;
+					}
+				}
+			} else {
+				logprint(LOG_ALERT, "Getting airport information for airport '", aptName, "' failed. Maybe the airport name is malformed ?")
+			}
+			
+			# The landing target position
+			me.tgt_pos.set_latlon(me.tgt_rwy.lat, me.tgt_rwy.lon);
+			
+			# Offset the target distance from threshold
+			me.tgt_pos.apply_course_distance(me.tgt_rwy.heading, me.tgt_dst);
+			
+			if (placeChalkMarkings) {
+				# If the user enabled the chalk markings, add the elevation offset to the terrain altitude
+				me.tgt_pos.set_alt(geo.elevation(me.tgt_pos.lat(), me.tgt_pos.lon()) + num(markingsElevationOffset));
 				
-				if (me.tgt_apt.runways[r].id == rwyName) {
-					me.tgt_rwy = curr;
-					break;
+				# Place the chalk markings for the landing area on the runway
+				me.chalkMarks = geo.put_model(me.addonBasePath~"/Models/markings-ga.xml", me.tgt_pos, me.tgt_rwy.heading, markingsPitch);
+				logprint(LOG_INFO, "Target elevation: " ~ sprintf("%.3f", geo.elevation(me.tgt_pos.lat(), me.tgt_pos.lon())));
+			} else {
+				me.tgt_pos.set_alt(geo.elevation(me.tgt_pos.lat(), me.tgt_pos.lon()));
+			}
+			
+			if (placeCones) {
+				# If the user enabled the TDZ cones, place them on the runway.
+				var conepos = geo.Coord.new(me.tgt_pos);
+				var left = 0;
+				var right = 0;
+				
+				if (me.tgt_rwy.heading - 90 < 0) {
+					left = me.tgt_rwy.heading - 90 + 360;
+				} else {
+					left = me.tgt_rwy.heading - 90;
+				}
+					
+				if (me.tgt_rwy.heading + 90 > 360) {
+					right = me.tgt_rwy.heading + 90 - 360;
+				} else {
+					right = me.tgt_rwy.heading + 90;
+				}
+				
+				for(var i = 1; i < 4; i = i + 1) {
+					conepos.set(me.tgt_pos);
+					conepos.apply_course_distance(left, 12.5 + 0.5 * i);
+					append(me.cones, geo.put_model(me.addonBasePath~"/Models/cone.xml", conepos));
+					conepos.set(me.tgt_pos);
+					conepos.apply_course_distance(right, 12.5 + 0.5 * i);
+					append(me.cones, geo.put_model(me.addonBasePath~"/Models/cone.xml", conepos));			
 				}
 			}
-		} else {
-			logprint(LOG_ALERT, "Getting airport information for airport '", aptName, "' faile. Maybe the sirport name is malformed ?")
-		}
-		
-		# the landing target position
-		me.tgt_pos.set_latlon(me.tgt_rwy.lat, me.tgt_rwy.lon);
-		
-		#offset the target distance from threshold
-		me.tgt_pos.apply_course_distance(me.tgt_rwy.heading, me.tgt_dst);
-		
-		me.tgt_pos.set_alt(geo.elevation(me.tgt_pos.lat(), me.tgt_pos.lon()));
-		
-		# place the chalk markings for the landing area on the runway
-		me.chalkMarks = geo.put_model(me.addonBasePath~"/Models/markings-ga.xml", me.tgt_pos, me.tgt_rwy.heading);
-		logprint(LOG_INFO, "Target elevation: " ~ sprintf("%.3f", geo.elevation(me.tgt_pos.lat(), me.tgt_pos.lon())));
-		
-		var conepos = geo.Coord.new(me.tgt_pos);
-		var left = 0;
-		var right = 0;
-		
-		if(me.tgt_rwy.heading - 90 < 0) {
-			left = me.tgt_rwy.heading - 90 + 360;
-		} else {
-			left = me.tgt_rwy.heading - 90;
-		}	
-		if(me.tgt_rwy.heading + 90 > 360) {
-			right = me.tgt_rwy.heading + 90 - 360;
-		} else {
-			right = me.tgt_rwy.heading + 90;
-		}
-		
-		#place the cones for tdz-area
-		for(var i=1; i<4; i=i+1) {
-			conepos.set(me.tgt_pos);
-			conepos.apply_course_distance(left, 12.5 + 0.5*i);
-			append(me.cones, geo.put_model(me.addonBasePath~"/Models/cone.xml", conepos));
-			conepos.set(me.tgt_pos);
-			conepos.apply_course_distance(right, 12.5 + 0.5*i);
-			append(me.cones, geo.put_model(me.addonBasePath~"/Models/cone.xml", conepos));
-			
 		}
 	},
 	
 	setupAirplane: func() {
-		#hard-coded, for now
+		# TODO: Determine the gear nodes at runtime
 		me.gear_props = ["gear/gear[0]/wow", "gear/gear[1]/wow", "gear/gear[2]/wow"];
 	},
 	
 	removeModels: func() {
-		me.chalkMarks.remove;
+		logprint(LOG_DEBUG, "Removing models");
+		# only try to remove the chalk markings if they were enabled
+		if (getprop(me.PROP_PATH ~ "chalkmarkings-pitch-deg")) {
+			me.chalkMarks.removeChildren();
+			me.chalkMarks.remove();
+		}
+		
 		foreach (var cone; me.cones) {
-			cone.remove;
+			cone.removeChildren();
+			cone.remove();
 		}
 	},
 	
@@ -231,7 +262,15 @@ var LandingChallenge = {
 	
 	compileLandingData: func() {
 		me.gforce = getprop("accelerations/pilot-gdamped");
+		me.airspeed = getprop("/velocities/airspeed-kt");
+		me.groundspeed = getprop("/velocities/groundspeed-kt");
 		me.fpm = getprop("instrumentation/vertical-speed-indicator/indicated-speed-fpm");
+		me.bankAngle = getprop("/orientation/roll-deg");
+		me.pitchAngle = getprop("/orientation/pitch-deg");
+		
+		# XXX: shouldn't we rather show the rotation of the aircraft relative to the runway instead of
+		# relative to the direction it's moving ? Or maybe both ?
+		me.slipAngle = getprop("/orientation/side-slip-deg");
 		me.landingPos = geo.aircraft_position();
 		
 		var absdist = me.landingPos.distance_to(me.tgt_pos);
@@ -239,27 +278,34 @@ var LandingChallenge = {
 		var crs = me.landingPos.course_to(me.tgt_pos);
 		crs -= me.tgt_rwy.heading;
 		
-		me.overshoot = -absdist * math.cos(D2R*crs); 
-		me.offcenter = absdist * math.sin(D2R*crs);
+		me.overshoot = -absdist * math.cos(D2R * crs); 
+		me.offcenter = absdist * math.sin(D2R * crs);
 		
-		me.bankAngle = getprop("/orientation/roll-deg");
-		me.slipAngle = getprop("/orientation/side-slip-deg");
-		
-		#output to landing properties
-		setprop(me.PROP_PATH~"landing-data/g-force", sprintf("%.1f", me.gforce));
-		setprop(me.PROP_PATH~"landing-data/fpm", sprintf("%.1f", me.fpm));
-		setprop(me.PROP_PATH~"landing-data/overshoot", sprintf("%.1f", me.overshoot));
-		setprop(me.PROP_PATH~"landing-data/offcenter", sprintf("%.1f", me.offcenter));
-		setprop(me.PROP_PATH~"landing-data/bank-angle", sprintf("%.1f", me.bankAngle));
-		setprop(me.PROP_PATH~"landing-data/slip-angle", sprintf("%.1f", me.slipAngle));
+		# output to landing properties
+		setprop(me.PROP_PATH ~ "landing-data/g-force", sprintf("%.1f", me.gforce));
+		setprop(me.PROP_PATH ~ "landing-data/fpm", sprintf("%.1f", me.fpm));
+		setprop(me.PROP_PATH ~ "landing-data/overshoot", sprintf("%.1f", me.overshoot));
+		setprop(me.PROP_PATH ~ "landing-data/offcenter", sprintf("%.1f", me.offcenter));
+		setprop(me.PROP_PATH ~ "landing-data/bank-angle", sprintf("%.1f", me.bankAngle));
+		setprop(me.PROP_PATH ~ "landing-data/pitch-angle", sprintf("%.1f", me.pitchAngle));
+		setprop(me.PROP_PATH ~ "landing-data/slip-angle", sprintf("%.1f", me.slipAngle));
+		setprop(me.PROP_PATH ~ "landing-data/airspeed", sprintf("%.1f", me.airspeed));
+		setprop(me.PROP_PATH ~ "landing-data/groundspeed", sprintf("%.1f", me.groundspeed));
 	},
 	
 	printLandingMessage: func() {
-		var msg = "Landed! Fpm: " ~ sprintf("%.3f", me.fpm) ~ "; G-Force: " ~ sprintf("%.1f", me.gforce) ~ "; Bank Angle: " ~ sprintf("%.1f", me.bankAngle) ~ "; Side-Slip Angle: " ~ sprintf("%.1f", me.slipAngle) ~ "; Distance to target: " ~ sprintf("%.1f", me.overshoot) ~ "; Distance from Centerline: " ~ sprintf("%.1f", me.offcenter);
+		me.msg = "Landed! Vertical speed: " ~ sprintf("%.1f", me.fpm) ~ "; Airspeed: " ~ sprintf("%.1f", me.airspeed) ~ "; Groundspeed: " ~ sprintf("%.1f", me.groundspeed) ~ "; G-Force: " ~ sprintf("%.1f", me.gforce) ~ ";\nBank angle: " ~ sprintf("%.1f", me.bankAngle) ~ "; Pitch angle: " ~ sprintf("%.1f", me.pitchAngle) ~ "; Sideslip angle: " ~ sprintf("%.1f", me.slipAngle) ~ "; Distance to target: " ~ sprintf("%.1f", me.overshoot) ~ "; Distance from centerline: " ~ sprintf("%.1f", me.offcenter);
 		
-		me.window.write(msg);
-		logprint(LOG_ALERT, "Last Landing: " ~ msg);
-		fgcommand("show-landing-notification-popup");
+		logprint(LOG_ALERT, me.msg);
+		
+		if (getprop(me.PROP_PATH ~ "message")) {
+			me.window.write(me.msg);
+		}
+		
+		if (getprop(me.PROP_PATH ~ "message-popup")) {
+			fgcommand("show-landing-notification-popup");
+		}
+		
 		# TODO: implement MPChat message sending
 	},
 }; # LandingChallenge Class
