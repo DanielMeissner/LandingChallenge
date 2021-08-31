@@ -25,6 +25,8 @@ var LandingNotification =
 	# Destructor
 	del: func {
 		logprint(LOG_DEBUG, "Deleting LandingChallenge");
+		setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index", me._node.getIndex());
+		
 		call(me.parents[1].del, nil, nil, var err = []);
 		if (me["_canvas"] != nil) {
 			me._canvas.del();
@@ -145,7 +147,14 @@ var landingNotificationCanvas = nil;
 
 var showLandingNotification = func() {
 	logprint(LOG_DEBUG, "Showing landing notification");
+	
 	if (landingNotificationCanvas == nil) {
+		# if there was a canvas node left behind due to plugin reload, delete it
+		if (var oldIndex = getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index") > -1) {
+			props.getNode("/sim/gui/canvas/window[" ~ oldIndex ~ "]").remove();
+			setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index", -1);
+		}
+		
 		landingNotificationCanvas = LandingNotification.new();
 		landingNotificationCanvas._createCanvas();
 	}

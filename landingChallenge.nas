@@ -306,6 +306,10 @@ var LandingChallenge = {
 			fgcommand("show-landing-notification-popup");
 		}
 		
+		if (getprop(me.PROP_PATH ~ "announce-mp")) {
+			setprop("/sim/multiplay/chat", me.msg);
+		}
+		
 		# TODO: implement MPChat message sending
 	},
 }; # LandingChallenge Class

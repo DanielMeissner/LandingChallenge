@@ -30,19 +30,28 @@ along with FlightGear.  If not, see <http://www.gnu.org/licenses/>.
         <by-id>
             <org.flightgear.addons.landing-challenge>
                 <addon-devel>
-                    <airport type="string">EDHE</airport>
+                    <airport type="string">Uetersen (EDHE)</airport>
                     <runway type="string">09</runway>
                     <target-dist-m type="int">90</target-dist-m>
-                    <markings-offset-m type="int">0.5</markings-offset-m>
                     <landed>0</landed>
                     <altTrig>0</altTrig>
+                    <message>1</message>
+                    <message-popup>1</message-popup>
+                    <announce-mp>1</announce-mp>
+                    <chalkmarkings-pitch-deg>0</chalkmarkings-pitch-deg>
+                    <chalkmarkings-offset-m>0</chalkmarkings-offset-m>
+                    <render-cones>1</render-cones>
+                    <render-chalkmarkings>1</render-chalkmarkings>
+                    <render-obstacle>0</render-obstacle>
                     <landing-data>
-                        <g-force type ="string"></g-force>
-                        <fpm type = "string"></fpm>
-                        <overshoot type="string"></overshoot>
-                        <offcenter type="string"></offcenter>
-                        <bank-angle type="string"></bank-angle>
-                        <slip-angle type="string"></slip-angle>
+                        <g-force type ="string">0</g-force>
+                        <fpm type = "string">0</fpm>
+                        <airspeed type="string">0</airspeed>
+                        <groundspeed type="string">0</groundspeed>
+                        <overshoot type="string">0</overshoot>
+                        <offcenter type="string">0</offcenter>
+                        <bank-angle type="string">0</bank-angle>
+                        <slip-angle type="string">0</slip-angle>
                     </landing-data>
                     <modes>
                         <mode-off type="int">1</mode-off>
@@ -50,6 +59,8 @@ along with FlightGear.  If not, see <http://www.gnu.org/licenses/>.
                         <mode-ga-competition type="int">0</mode-ga-competition>
                         <mode-ils-training type="int">0</mode-ils-training>
                     </modes>
+                    <!-- needed to ensure we don't get a white box instead of the landingNotification-->
+                    <old-index>-1</old-index>
                 </addon-devel>
             </org.flightgear.addons.landing-challenge>
         </by-id>

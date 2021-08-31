@@ -103,7 +103,7 @@
 						<script>setMode("justfly")</script>
 					</binding>
 					 <live>true</live>
-					 <disabled>true</disabled>
+					 <enable>false</enable>
 				</radio>
 				<radio>
 					<halign>left</halign>
@@ -136,7 +136,7 @@
 						<script>setMode("ils-training")</script>
 					</binding>
 					 <live>true</live>
-					 <disabled>true</disabled>
+					 <enable>false</enable>
 				</radio>
 			</group>
 			<hrule />
@@ -178,7 +178,7 @@
 					<pref-width>100</pref-width>
 					<halign>left</halign>
 					<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/runway</property>
-					<label>Runway</label>
+					<label>Runway (include leading zero when appropriate !)</label>
 					<binding>
 						<command>dialog-apply</command>
 					</binding>
@@ -205,7 +205,7 @@
 			<valign>top</valign>
 			<text>
 				<halign>left</halign>
-				<label>Configure target markings for GA Competition Flying:</label>
+				<label>Configure target markings for GA competition mode:</label>
 			</text>
 			
 			<checkbox>
@@ -217,6 +217,7 @@
 				<halign>left</halign>
 				<label>2m Obstacle</label>
 				<property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/render-obstacle</property>
+				<enable>false</enable>
 			</checkbox>
 			<checkbox>
 				<halign>left</halign>
@@ -264,7 +265,6 @@
 				<label>Announce landing results on Multiplayer chat</label>
 				<property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/announce-mp</property>
 			</checkbox>
-			<disabled>true</disabled>
 		</group>
 	</group>
 	<hrule />
@@ -286,9 +286,13 @@
 			</binding>
 		</button>
 		<button>
-			<legend>Apply settings</legend>
+			<legend>Apply</legend>
 			<binding>
 				<command>dialog-apply</command>
+			</binding>
+			<binding>
+				<command>nasal</command>
+				<script>LDG.challenge.del(); LDG.challenge.setupChallenge();</script>
 			</binding>
 		</button>
 		<button>
