@@ -51,8 +51,11 @@ var unload = func(addon) {
     # e.g. myCanvas.del();
     logprint(LOG_DEBUG, "Unloading landing challenge plugin");
     if (globals[namespace] != nil and globals[namespace]["LDG"] != nil) {
-        var err=[];
+        var err = [];
         call(globals[namespace].LDG.del, [], err);
+        if (globals[namespace].LDG.landingNotification != nil) {
+       	 call(globals[namespace].LDG.landingNotification.del, [], err);
+        }
     }
     removecommand("show-landing-notification-popup");
     removecommand("show-landing-data-dialog");

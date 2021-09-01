@@ -52,6 +52,7 @@ along with FlightGear.  If not, see <http://www.gnu.org/licenses/>.
                         <offcenter type="string">0</offcenter>
                         <bank-angle type="string">0</bank-angle>
                         <slip-angle type="string">0</slip-angle>
+                        <pitch-angle type="string">0</pitch-angle>
                     </landing-data>
                     <modes>
                         <mode-off type="int">1</mode-off>

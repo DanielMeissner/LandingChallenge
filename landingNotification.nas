@@ -24,8 +24,9 @@ var LandingNotification =
 
 	# Destructor
 	del: func {
-		logprint(LOG_DEBUG, "Deleting LandingChallenge");
+		logprint(LOG_DEBUG, "Deleting landing notification");
 		setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index", me._node.getIndex());
+		print("OLDINDEX", getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index"));
 		
 		call(me.parents[1].del, nil, nil, var err = []);
 		if (me["_canvas"] != nil) {
