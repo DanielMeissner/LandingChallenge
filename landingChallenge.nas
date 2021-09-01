@@ -294,7 +294,7 @@ var LandingChallenge = {
 	},
 	
 	printLandingMessage: func() {
-		me.msg = "Landed! Vertical speed: " ~ sprintf("%.1f", me.fpm) ~ "; Airspeed: " ~ sprintf("%.1f", me.airspeed) ~ "; Groundspeed: " ~ sprintf("%.1f", me.groundspeed) ~ "; G-Force: " ~ sprintf("%.1f", me.gforce) ~ ";\nBank angle: " ~ sprintf("%.1f", me.bankAngle) ~ "; Pitch angle: " ~ sprintf("%.1f", me.pitchAngle) ~ "; Sideslip angle: " ~ sprintf("%.1f", me.slipAngle) ~ "; Distance to target: " ~ sprintf("%.1f", me.overshoot) ~ "; Distance from centerline: " ~ sprintf("%.1f", me.offcenter);
+		me.msg = "Landed! Vertical speed: " ~ sprintf("%.1f", me.fpm) ~ " FPM; Airspeed: " ~ sprintf("%.1f", me.airspeed) ~ " kts; Groundspeed: " ~ sprintf("%.1f", me.groundspeed) ~ " kts; G-Force: " ~ sprintf("%.1f", me.gforce) ~ ";\nBank angle: " ~ sprintf("%.1f", me.bankAngle) ~ " deg; Pitch angle: " ~ sprintf("%.1f", me.pitchAngle) ~ " deg; Sideslip angle: " ~ sprintf("%.1f", me.slipAngle) ~ " deg; Distance to target: " ~ sprintf("%.1f", me.overshoot) ~ " ft; Distance from centerline: " ~ sprintf("%.1f", me.offcenter) ~ " ft";
 		
 		logprint(LOG_ALERT, me.msg);
 		

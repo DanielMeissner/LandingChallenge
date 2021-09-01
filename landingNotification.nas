@@ -19,15 +19,14 @@ var LandingNotification =
 		m._hideTimer = maketimer(m.SHOW_TIME, m, LandingNotification._hideTimeout);
 		m._hideTimer.singleShot = 1;
 
+		setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index", m._node.getIndex());
+		
 		return m;
 	},
 
 	# Destructor
 	del: func {
 		logprint(LOG_DEBUG, "Deleting landing notification");
-		setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index", me._node.getIndex());
-		print("OLDINDEX", getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index"));
-		
 		call(me.parents[1].del, nil, nil, var err = []);
 		if (me["_canvas"] != nil) {
 			me._canvas.del();

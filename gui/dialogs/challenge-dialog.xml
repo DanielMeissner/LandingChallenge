@@ -103,7 +103,12 @@
 						<script>setMode("justfly")</script>
 					</binding>
 					 <live>true</live>
-					 <enable>false</enable>
+					<enable>
+						<equals>
+							<property>/false</property>
+							<value>implemented</value>
+						</equals>
+					</enable>
 				</radio>
 				<radio>
 					<halign>left</halign>
@@ -136,7 +141,12 @@
 						<script>setMode("ils-training")</script>
 					</binding>
 					 <live>true</live>
-					 <enable>false</enable>
+					<enable>
+						<equals>
+							<property>/false</property>
+							<value>implemented</value>
+						</equals>
+					</enable>
 				</radio>
 			</group>
 			<hrule />
@@ -217,7 +227,12 @@
 				<halign>left</halign>
 				<label>2m Obstacle</label>
 				<property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/render-obstacle</property>
-				<enable>false</enable>
+				<enable>
+					<equals>
+						<property>/false</property>
+						<value>implemented</value>
+					</equals>
+				</enable>
 			</checkbox>
 			<checkbox>
 				<halign>left</halign>

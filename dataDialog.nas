@@ -64,7 +64,7 @@ var showLandingDataDialog = func() {
 	deviationText.setAlignment("center-top");
 	deviationText.setFontSize(15, 1);
 	deviationText.setTranslation(ICONMARGIN + (ICONWIDTH / 2), (ICONMARGIN * 2) + ICONHEIGHT);
-	deviationText.setText("Target\ndistance:\n" ~ abs(overshoot) ~ "\n\nCenterline\ndistance:\n" ~ abs(offcenter) ~ "\n\nSideslip\nangle:\n" ~ sideslipAngle);
+	deviationText.setText("Target\ndistance:\n" ~ abs(overshoot) ~ " ft\n\nCenterline\ndistance:\n" ~ abs(offcenter) ~ " ft\n\nSideslip\nangle:\n" ~ sideslipAngle ~ " deg");
 	
 	var bankIndicatorGroup = rootGroup.createChild("group");
 	canvas.parsesvg(bankIndicatorGroup, "[addon=org.flightgear.addons.landing-challenge]gui/images/bank-indicator.svg");
@@ -78,7 +78,7 @@ var showLandingDataDialog = func() {
 	bankText.setAlignment("center-top");
 	bankText.setFontSize(15, 1);
 	bankText.setTranslation(ICONMARGIN * 2 + (ICONWIDTH / 2) + ICONWIDTH, (ICONMARGIN * 2) + ICONHEIGHT);
-	bankText.setText("Bank angle:\n" ~ bankAngle);
+	bankText.setText("Bank angle:\n" ~ bankAngle ~ " deg");
 	
 	
 	var vsiIndicatorGroup = rootGroup.createChild("group");
@@ -93,7 +93,7 @@ var showLandingDataDialog = func() {
 	vsiText.setAlignment("center-top");
 	vsiText.setFontSize(15, 1);
 	vsiText.setTranslation(ICONMARGIN * 3 + (ICONWIDTH / 2) + ICONWIDTH * 2, (ICONMARGIN * 2) + ICONHEIGHT);
-	vsiText.setText("Vertical\nspeed:\n" ~ vsFPM);
+	vsiText.setText("Vertical\nspeed:\n" ~ vsFPM ~ " FPS");
 	
 	
 	var gForceIconGroup = rootGroup.createChild("group");
@@ -121,7 +121,7 @@ var showLandingDataDialog = func() {
 	sideviewText.setAlignment("center-top");
 	sideviewText.setFontSize(15, 1);
 	sideviewText.setTranslation(ICONMARGIN * 5 + (ICONWIDTH / 2) + ICONWIDTH * 4, (ICONMARGIN * 2) + ICONHEIGHT);
-	sideviewText.setText("Pitch\nangle:\n" ~ pitchAngle ~ "\n\nAirspeed:\n" ~ airspeed ~ "\n\nGroundspeed\n" ~ groundspeed);
+	sideviewText.setText("Pitch\nangle:\n" ~ pitchAngle ~ " deg\n\nAirspeed:\n" ~ airspeed ~ " kts\n\nGroundspeed\n" ~ groundspeed ~ " kts");
 }
 
 addcommand("show-landing-data-dialog", showLandingDataDialog);
