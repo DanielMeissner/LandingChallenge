@@ -17,8 +17,6 @@
                 <email type="string"></email>
                 <url type="string"></url>
             </author>
-        </authors>
-        <authors>
             <author>
                 <name type="string">TheFGFSEagle</name>
                 <email type="string">programmer.anonymous@yandex.com</email>

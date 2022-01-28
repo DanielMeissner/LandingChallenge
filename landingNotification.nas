@@ -14,10 +14,10 @@ var LandingNotification = {
 		obj.setBool("visible", 0);
 		obj.setInt("z-index", canvas.gui.STACK_INDEX["always-on-top"]);
 
-		obj._hideTimer = maketimer(m.SHOW_TIME, obj, LandingNotification._hideTimeout);
+		obj._hideTimer = maketimer(obj.SHOW_TIME, obj, LandingNotification.hide);
 		obj._hideTimer.singleShot = 1;
 
-		return m;
+		return obj;
 	},
 
 	# Destructor
@@ -82,7 +82,7 @@ var LandingNotification = {
 	},
 
 	clicked: func() {
-		me.hideNow();
+		me.hide();
 		fgcommand("show-landing-data-dialog");		
 	},
 
@@ -126,14 +126,9 @@ var LandingNotification = {
 		me._hideTimer.start();
 	},
 
-	hideNow: func()
+	hide: func()
 	{
 		me._hideTimer.stop();
-		me._hideTimeout();
-	},
-
-	_hideTimeout: func()
-	{
 		me.setBool("visible", 0);
 	}
 };
@@ -149,4 +144,4 @@ var showLandingNotification = func() {
 	landingNotification.show();
 }
 
-addcommand("show-landing-notification-popup", showLandingNotification);
+addcommand("show-landing-notification", showLandingNotification);

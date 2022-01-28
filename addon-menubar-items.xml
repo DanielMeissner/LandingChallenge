@@ -51,7 +51,7 @@
 			<item>
 				<label>Debug trigger popup</label>
 				<binding>
-					<command>show-landing-notification-popup</command>
+					<command>show-landing-notification</command>
 					<id>org.flightgear.addons.landing-challenge</id>
 				</binding>
 			</item>

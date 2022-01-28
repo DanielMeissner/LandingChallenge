@@ -1,127 +1,121 @@
-var PROPPATH = "/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/landing-data/";
-var ICONMARGIN = 60;
-var ICONWIDTH = 64;
-var ICONHEIGHT = 64;
-
-var showLandingDataDialog = func() {
-	# get landing data from the property tree
-	var offcenter = -num(getprop(PROPPATH ~ "offcenter"));
-	var overshoot = -num(getprop(PROPPATH ~ "overshoot"));
-	var sideslipAngle = getprop(PROPPATH ~ "slip-angle");
-	var bankAngle = getprop(PROPPATH ~ "bank-angle");
-	var pitchAngle = getprop(PROPPATH ~ "pitch-angle");
-	var vsFPM = getprop(PROPPATH ~ "fpm");
-	var gForce = getprop(PROPPATH ~ "g-force");
-	var airspeed = getprop(PROPPATH ~ "airspeed");
-	var groundspeed = getprop(PROPPATH ~ "groundspeed");
+var LandingDataDialog = {
+	new: func {
+		var obj = {
+			parents: [LandingDataDialog, canvas.Window.new([780, 400], "dialog").setTitle("Landing data")],
+			dataNode: props.globals.getNode("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/landing-data"),
+			ICONMARGIN: 60,
+			ICONWIDTH: 64,
+			ICONHEIGHT: 64,
+		};
+		
+		obj.offcenterNode = obj.dataNode.getNode("offcenter-m");
+		obj.overshootNode = obj.dataNode.getNode("overshoot-m");
+		obj.sideslipNode = obj.dataNode.getNode("sideslip-deg");
+		obj.rollNode = obj.dataNode.getNode("roll-deg");
+		obj.pitchNode = obj.dataNode.getNode("pitch-deg");
+		obj.verticalSpeedNode = obj.dataNode.getNode("vertical-speed-fpm");
+		obj.gForceNode = obj.dataNode.getNode("g-force");
+		obj.airspeedNode = obj.dataNode.getNode("airspeed-kt");
+		obj.groundspeedNode = obj.dataNode.getNode("groundspeed-kt");
+		
+		obj.canvas = obj.parents[1].createCanvas(1);
+		obj.canvas.set("background", "#ffffff");
+		obj.group = obj.canvas.createGroup();
+		
+		obj.deviationIcon = obj.group.createChild("group");
+		canvas.parsesvg(obj.deviationIcon, "[addon=org.flightgear.addons.landing-challenge]gui/images/threshold-deviation.svg");
+		obj.deviationIcon.setTranslation(obj.ICONMARGIN, obj.ICONMARGIN);
+		
+		obj.deviationIconAirplane = obj.deviationIcon.getElementById("airplane");
+		obj.deviationText = obj.group.createChild("text")
+						.setColor(0, 0, 0, 1)
+						.setAlignment("center-top")
+						.setFontSize(15, 1)
+						.setTranslation(obj.ICONMARGIN + (obj.ICONWIDTH / 2), (obj.ICONMARGIN * 2) + obj.ICONHEIGHT);
+		
+		obj.rollIcon = obj.group.createChild("group")
+						.setTranslation(obj.ICONMARGIN * 2 + obj.ICONWIDTH, obj.ICONMARGIN);
+		canvas.parsesvg(obj.rollIcon, "[addon=org.flightgear.addons.landing-challenge]gui/images/bank-indicator.svg");
+		
+		obj.rollIconAirplane = obj.rollIcon.getElementById("airplane");
+		
+		obj.rollText = obj.group.createChild("text")
+						.setColor(0, 0, 0, 1)
+						.setAlignment("center-top")
+						.setFontSize(15, 1)
+						.setTranslation(obj.ICONMARGIN * 2 + (obj.ICONWIDTH / 2) + obj.ICONWIDTH, (obj.ICONMARGIN * 2) + obj.ICONHEIGHT);
+		
+		obj.verticalSpeedIcon = obj.group.createChild("group")
+						.setTranslation(obj.ICONMARGIN * 3 + obj.ICONWIDTH * 2, obj.ICONMARGIN);
+		canvas.parsesvg(obj.verticalSpeedIcon, "[addon=org.flightgear.addons.landing-challenge]gui/images/vsi-indicator.svg");
+		
+		obj.verticalSpeedIconNeedle = obj.verticalSpeedIcon.getElementById("needle");
+		
+		obj.verticalSpeedText = obj.group.createChild("text")
+						.setColor(0, 0, 0, 1)
+						.setAlignment("center-top")
+						.setFontSize(15, 1)
+						.setTranslation(obj.ICONMARGIN * 3 + (obj.ICONWIDTH / 2) + obj.ICONWIDTH * 2, (obj.ICONMARGIN * 2) + obj.ICONHEIGHT);
+		
+		obj.gForceIcon = obj.group.createChild("group")
+						.setTranslation(obj.ICONMARGIN * 4 + obj.ICONWIDTH * 3, obj.ICONMARGIN);
+		canvas.parsesvg(obj.gForceIcon, "[addon=org.flightgear.addons.landing-challenge]gui/images/g-force.svg");
+		
+		obj.gForceText = obj.group.createChild("text")
+						.setColor(0, 0, 0, 1)
+						.setAlignment("center-top")
+						.setFontSize(15, 1)
+						.setTranslation(obj.ICONMARGIN * 4 + (obj.ICONWIDTH / 2) + obj.ICONWIDTH * 3, (obj.ICONMARGIN * 2) + obj.ICONHEIGHT);
+		
+		obj.sideviewIcon = obj.group.createChild("group")
+						.setTranslation(obj.ICONMARGIN * 5 + obj.ICONWIDTH * 4, obj.ICONMARGIN);
+		canvas.parsesvg(obj.sideviewIcon, "[addon=org.flightgear.addons.landing-challenge]gui/images/sideview.svg");
+		
+		obj.sideviewIconAirplane = obj.sideviewIcon.getElementById("airplane");
+		
+		obj.sideviewText = obj.group.createChild("text")
+						.setColor(0, 0, 0, 1)
+						.setAlignment("center-top")
+						.setFontSize(15, 1)
+						.setTranslation(obj.ICONMARGIN * 5 + (obj.ICONWIDTH / 2) + obj.ICONWIDTH * 4, (obj.ICONMARGIN * 2) + obj.ICONHEIGHT);
+		
+		return obj;
+	},
 	
-	# limit the offcenter distance shown - one icon would else be hidden by the previous if offcenter is very much
-	var offcentergeom = 0;
-	if (offcenter > ICONWIDTH / 2) {
-		offcentergeom = ICONWIDTH / 2;
-	} elsif (offcenter < -ICONWIDTH) {
-		offcentergeom = -(ICONWIDTH / 2);
-	} else {
-		offcentergeom = offcenter;
+	update: func {
+		var sideslipAngle = me.sideslipNode.getValue();
+		var offcenter = me.offcenterNode.getValue();
+		var overshoot = me.overshootNode.getValue();
+		var rollAngle = me.rollNode.getValue();
+		var verticalSpeed = me.verticalSpeedNode.getValue();
+		var gForce = me.gForceNode.getValue();
+		var pitchAngle = me.pitchNode.getValue();
+		var airspeed = me.airspeedNode.getValue();
+		var groundspeed = me.groundspeedNode.getValue();
+		
+		me.deviationIconAirplane.setRotation(sideslipAngle * D2R);
+		me.deviationIconAirplane.setTranslation(math.clamp(offcenter, -me.ICONWIDTH / 2, me.ICONWIDTH / 2), math.clamp(overshoot, -me.ICONHEIGHT / 2, me.ICONHEIGHT / 2));
+		me.rollIconAirplane.setRotation(rollAngle * D2R);
+		me.verticalSpeedIconNeedle.setRotation((45 * math.clamp(verticalSpeed, -1400, 1400) / 500) * D2R);
+		me.gForceIcon.setScale(gForce);
+		me.sideviewIconAirplane.setRotation(pitchAngle * D2R);
+		
+		me.deviationText.setText("Target\ndistance:\n" ~ abs(overshoot) ~ " ft\n\nCenterline\ndistance:\n" ~ abs(offcenter) ~ " ft\n\nSideslip\nangle:\n" ~ abs(sideslipAngle) ~ " deg");
+		me.rollText.setText("Bank angle:\n" ~ rollAngle ~ " deg");
+		me.verticalSpeedText.setText("Vertical\nspeed:\n" ~ verticalSpeed ~ " FPM");
+		me.gForceText.setText("G-Force:\n" ~ gForce);
+		me.sideviewText.setText("Pitch\nangle:\n" ~ pitchAngle ~ " deg\n\nAirspeed:\n" ~ airspeed ~ " kts\n\nGroundspeed\n" ~ groundspeed ~ " kts");
 	}
-	
-	var overshootgeom = 0;
-	if (overshoot > ICONHEIGHT / 2) {
-		overshootgeom = ICONHEIGHT / 2;
-	} elsif (overshoot < -ICONHEIGHT) {
-		overshootgeom = -(ICONHEIGHT / 2);
-	} else {
-		overshootgeom = overshoot;
-	}
-	
-	var vsFPMgeom = 0;
-	# limit vertical speed shown so the needle doesn't deflect too much
-	if (vsFPM > 1400) {
-		vsFPMgeom = 1400;
-	} elsif (vsFPM < -1400) {
-		vsFPMgeom = -1400;
-	} else {
-		vsFPMgeom = vsFPM;
-	}
-	vsFPMgeom = 45 * vsFPMgeom / 500;
-	
-	var dialog = canvas.Window.new([780, 400], "dialog").setTitle("Landing data");
-	var dialogCanvas = dialog.createCanvas(1).set("background", "#ffffff");
-	var rootGroup = dialogCanvas.createGroup();
-#	var rootBox = canvas.VBoxLayout.new();
-#	rootBox.setContentsMargin(10);
-#	dialog.setLayout(rootBox);
-	
-	var deviationImageGroup = rootGroup.createChild("group");
-	canvas.parsesvg(deviationImageGroup, "[addon=org.flightgear.addons.landing-challenge]gui/images/threshold-deviation.svg");
-	deviationImageGroup.setTranslation(ICONMARGIN, ICONMARGIN);
-	
-	var deviationImageGroupAirplane = deviationImageGroup.getElementById("airplane");
-	deviationImageGroupAirplane.setTranslation(offcentergeom, overshootgeom);
-	deviationImageGroupAirplane.setRotation(sideslipAngle * D2R); # need to convert here because slip-angle is in degrees but setRotation needs radians
-	deviationText = rootGroup.createChild("text");
-	deviationText.setColor(0, 0, 0, 1);
-	deviationText.setAlignment("center-top");
-	deviationText.setFontSize(15, 1);
-	deviationText.setTranslation(ICONMARGIN + (ICONWIDTH / 2), (ICONMARGIN * 2) + ICONHEIGHT);
-	deviationText.setText("Target\ndistance:\n" ~ abs(overshoot) ~ " ft\n\nCenterline\ndistance:\n" ~ abs(offcenter) ~ " ft\n\nSideslip\nangle:\n" ~ sideslipAngle ~ " deg");
-	
-	var bankIndicatorGroup = rootGroup.createChild("group");
-	canvas.parsesvg(bankIndicatorGroup, "[addon=org.flightgear.addons.landing-challenge]gui/images/bank-indicator.svg");
-	bankIndicatorGroup.setTranslation(ICONMARGIN * 2 + ICONWIDTH, ICONMARGIN);
-	
-	var bankIndicatorAirplane = bankIndicatorGroup.getElementById("airplane");
-	bankIndicatorAirplane.setRotation(bankAngle * D2R);
+};
 
-	bankText = rootGroup.createChild("text");
-	bankText.setColor(0, 0, 0, 1);
-	bankText.setAlignment("center-top");
-	bankText.setFontSize(15, 1);
-	bankText.setTranslation(ICONMARGIN * 2 + (ICONWIDTH / 2) + ICONWIDTH, (ICONMARGIN * 2) + ICONHEIGHT);
-	bankText.setText("Bank angle:\n" ~ bankAngle ~ " deg");
-	
-	
-	var vsiIndicatorGroup = rootGroup.createChild("group");
-	canvas.parsesvg(vsiIndicatorGroup, "[addon=org.flightgear.addons.landing-challenge]gui/images/vsi-indicator.svg");
-	vsiIndicatorGroup.setTranslation(ICONMARGIN * 3 + ICONWIDTH * 2, ICONMARGIN);
-	
-	var vsiIndicatorNeedle = vsiIndicatorGroup.getElementById("needle");
-	vsiIndicatorNeedle.setRotation(vsFPMgeom * D2R);
+var landingDataDialog = nil;
 
-	vsiText = rootGroup.createChild("text");
-	vsiText.setColor(0, 0, 0, 1);
-	vsiText.setAlignment("center-top");
-	vsiText.setFontSize(15, 1);
-	vsiText.setTranslation(ICONMARGIN * 3 + (ICONWIDTH / 2) + ICONWIDTH * 2, (ICONMARGIN * 2) + ICONHEIGHT);
-	vsiText.setText("Vertical\nspeed:\n" ~ vsFPM ~ " FPS");
-	
-	
-	var gForceIconGroup = rootGroup.createChild("group");
-	canvas.parsesvg(gForceIconGroup, "[addon=org.flightgear.addons.landing-challenge]gui/images/g-force.svg");
-	gForceIconGroup.setTranslation(ICONMARGIN * 4 + ICONWIDTH * 3, ICONMARGIN);
-	gForceIconGroup.setScale(gForce);
-	
-	gForceText = rootGroup.createChild("text");
-	gForceText.setColor(0, 0, 0, 1);
-	gForceText.setAlignment("center-top");
-	gForceText.setFontSize(15, 1);
-	gForceText.setTranslation(ICONMARGIN * 4 + (ICONWIDTH / 2) + ICONWIDTH * 3, (ICONMARGIN * 2) + ICONHEIGHT);
-	gForceText.setText("G-Force:\n" ~ gForce);
-	
-	
-	var sideviewGroup = rootGroup.createChild("group");
-	canvas.parsesvg(sideviewGroup, "[addon=org.flightgear.addons.landing-challenge]gui/images/sideview.svg");
-	sideviewGroup.setTranslation(ICONMARGIN * 5 + ICONWIDTH * 4, ICONMARGIN);
-	
-	var sideviewAirplane = sideviewGroup.getElementById("airplane");
-	sideviewAirplane.setRotation(pitchAngle * D2R);
-	
-	sideviewText = rootGroup.createChild("text");
-	sideviewText.setColor(0, 0, 0, 1);
-	sideviewText.setAlignment("center-top");
-	sideviewText.setFontSize(15, 1);
-	sideviewText.setTranslation(ICONMARGIN * 5 + (ICONWIDTH / 2) + ICONWIDTH * 4, (ICONMARGIN * 2) + ICONHEIGHT);
-	sideviewText.setText("Pitch\nangle:\n" ~ pitchAngle ~ " deg\n\nAirspeed:\n" ~ airspeed ~ " kts\n\nGroundspeed\n" ~ groundspeed ~ " kts");
+var showLandingDataDialog = func {
+	if (landingDataDialog == nil) {
+		landingDataDialog = LandingDataDialog.new();
+	}
+	landingDataDialog.update();
+	landingDataDialog.show();
 }
 
 addcommand("show-landing-data-dialog", showLandingDataDialog);

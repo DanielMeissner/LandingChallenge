@@ -39,11 +39,17 @@ var namespace = "LDG";
 
 var unload = func(addon) {
 	logprint(LOG_DEBUG, "Unloading landing challenge plugin");
+	
 	if (globals[namespace].landingNotification != nil) {
 		globals[namespace].landingNotification.del();
 	}
+	
+	if (globals[namespace].landingDataDialog != nil) {
+		globals[namespace].landingDataDialog.del();
+	}
+	
 	delete(globals, namespace);
-	removecommand("show-landing-notification-popup");
+	removecommand("show-landing-notification");
 	removecommand("show-landing-data-dialog");
 }
 

@@ -1,28 +1,30 @@
 <?xml version="1.0"?>
 <PropertyList>
-
-    <path>markings-ga.ac</path>
-    
-    <animation>
-        <enable-hot type="bool">false</enable-hot>
-    </animation>
-    
-    <animation>
-        <type>translate</type>
-        <property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/markings-offset-m</property>
-        <axis>
-            <x>0</x>
-            <y>0</y>
-            <z>1</z>
-        </axis>        
-    </animation>
-    
-    <animation>
-        <ambient>
-            <red>1.0</red>
-            <green>0.2</green>
-            <blue>0.0</blue>
-        </ambient>
-    </animation>
-    
+	<path>markings-ga.ac</path>
+	
+	<animation>
+		<enable-hot type="bool">false</enable-hot>
+	</animation>
+	<animation>
+		<type>noshadow</type>
+	</animation>
+	
+	<animation>
+		<type>translate</type>
+		<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/markings-offset-m</property>
+		<axis>
+			<x>0</x>
+			<y>0</y>
+			<z>1</z>
+		</axis>
+	</animation>
+	
+	<animation>
+		<type>material</type>
+		<ambient>
+			<red>1.0</red>
+			<green>0.2</green>
+			<blue>0.0</blue>
+		</ambient>
+	</animation>
 </PropertyList>

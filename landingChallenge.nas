@@ -41,9 +41,6 @@ var LandingChallenge = {
 	# helpers
 	PROP_PATH: "/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/",
 	
-	# bookkeeping:
-	instances: [],
-	
 	# constructor
 	new: func(path) {
 		var obj = {
@@ -52,8 +49,6 @@ var LandingChallenge = {
 			# bookkeeping
 			listeners: [],
 			cleanup: func() {
-				if (me.timer != nil and me.timer.stop != nil)
-					me.timer.stop();
 				foreach(var id; obj.listeners) {
 					print("Removing LandingChallenge listener " ~ id);
 					removelistener(id);
@@ -71,7 +66,6 @@ var LandingChallenge = {
 			
 			gear_props: [],
 			landedProp: nil,
-			altTrigProp: nil,
 			
 			# the target position geo.coords object
 			tgt_pos: geo.Coord.new(),
@@ -97,17 +91,12 @@ var LandingChallenge = {
 			
 			# props for landing and altitude trigger
 			landedProp: props.globals.getNode(me.PROP_PATH ~ "landed"),
-			altTrigProp: props.globals.getNode(me.PROP_PATH ~ "altTrig"),
 			
 			# the message window for in-game display
 			window: screen.window.new(10, 10, 3, 10), # create new window object. 750, 10 : Lower Right
 			
 		};
-		# some more bookkeeping
-		append(LandingChallenge.instances, obj);
-		
 		obj.landedProp.initNode(0);
-		obj.altTrigProp.initNode(0);
 		
 		obj.window.bg = [0, 0, 0, 0.5]; # black alpha .5 background
 		obj.window.fg = [1, 1, 1, 1];
@@ -118,11 +107,9 @@ var LandingChallenge = {
 	
 	# destructor
 	del: func() {
-		foreach (var i; LandingChallenge.instances) {
-			i.removeModels();
-			i.cleanup();
-		}
-		LandingChallenge.instances = [];
+		logprint(LOG_ALERT, "Deleting landing challenges");
+		me.removeModels();
+		me.cleanup();
 	},
 	
 	# interface
@@ -219,9 +206,9 @@ var LandingChallenge = {
 	},
 	
 	removeModels: func() {
-		logprint(LOG_DEBUG, "Removing models");
+		logprint(LOG_ALERT, "Removing models");
 		# only try to remove the chalk markings if they were enabled
-		if (getprop(me.PROP_PATH ~ "chalkmarkings-pitch-deg")) {
+		if (getprop(me.PROP_PATH ~ "render-chalkmarkings")) {
 			me.chalkMarks.removeChildren();
 			me.chalkMarks.remove();
 		}
@@ -234,7 +221,7 @@ var LandingChallenge = {
 	
 	setupLandingListeners: func() {
 		# set gear props listeners
-		forindex(var i; me.gear_props) 
+		forindex(var i; me.gear_props) {
 			setlistener(me.gear_props[i], func(n) {
 				if(n.getValue() and !me.landedProp.getBoolValue()) {
 					me.landedProp.setValue(1);
@@ -242,59 +229,55 @@ var LandingChallenge = {
 					 me.landedProp.setValue(0);
 				}
 			}, 0, 0);
-		
-		# setting up altTrigg timer
-		altTrigger = maketimer(1, func () {
-			if (getprop("position/altitude-agl-ft") > 20)
-				me.altTrigProp.setValue(1);
-		}); 
-		altTrigger.start();
+			append(me.listeners, me.gear_props[i])
+		}
 		
 		# setting up landed listener
 		var landed = setlistener(me.landedProp, func {
-			if(me.landedProp.getBoolValue() and me.altTrigProp.getBoolValue()) { 
-				me.altTrigProp.setValue(0);				
+			if(me.landedProp.getBoolValue()) { 
 				me.compileLandingData();
 				me.printLandingMessage();
 			} 
-		}); 
+		});
+		append(me.listeners, me.landedProp);
 	},
 	
 	compileLandingData: func() {
-		me.gforce = getprop("accelerations/pilot-gdamped");
+		me.gForce = getprop("/accelerations/pilot-gdamped");
 		me.airspeed = getprop("/velocities/airspeed-kt");
 		me.groundspeed = getprop("/velocities/groundspeed-kt");
-		me.fpm = getprop("instrumentation/vertical-speed-indicator/indicated-speed-fpm");
-		me.bankAngle = getprop("/orientation/roll-deg");
+		me.verticalSpeed = getprop("/velocities/vertical-speed-fps") * 60;
+		me.rollAngle = getprop("/orientation/roll-deg");
 		me.pitchAngle = getprop("/orientation/pitch-deg");
 		
 		# XXX: shouldn't we rather show the rotation of the aircraft relative to the runway instead of
 		# relative to the direction it's moving ? Or maybe both ?
-		me.slipAngle = getprop("/orientation/side-slip-deg");
+		me.sideslipAngle = getprop("/orientation/side-slip-deg");
 		me.landingPos = geo.aircraft_position();
 		
+		debug.dump(me.tgt_pos);
 		var absdist = me.landingPos.distance_to(me.tgt_pos);
 		
-		var crs = me.landingPos.course_to(me.tgt_pos);
-		crs -= me.tgt_rwy.heading;
+		var course = me.landingPos.course_to(me.tgt_pos);
+		course -= me.tgt_rwy.heading;
 		
-		me.overshoot = -absdist * math.cos(D2R * crs); 
-		me.offcenter = absdist * math.sin(D2R * crs);
+		me.overshoot = -absdist * math.cos(D2R * course); 
+		me.offcenter = absdist * math.sin(D2R * course);
 		
 		# output to landing properties
-		setprop(me.PROP_PATH ~ "landing-data/g-force", sprintf("%.1f", me.gforce));
-		setprop(me.PROP_PATH ~ "landing-data/fpm", sprintf("%.1f", me.fpm));
-		setprop(me.PROP_PATH ~ "landing-data/overshoot", sprintf("%.1f", me.overshoot));
-		setprop(me.PROP_PATH ~ "landing-data/offcenter", sprintf("%.1f", me.offcenter));
-		setprop(me.PROP_PATH ~ "landing-data/bank-angle", sprintf("%.1f", me.bankAngle));
-		setprop(me.PROP_PATH ~ "landing-data/pitch-angle", sprintf("%.1f", me.pitchAngle));
-		setprop(me.PROP_PATH ~ "landing-data/slip-angle", sprintf("%.1f", me.slipAngle));
-		setprop(me.PROP_PATH ~ "landing-data/airspeed", sprintf("%.1f", me.airspeed));
-		setprop(me.PROP_PATH ~ "landing-data/groundspeed", sprintf("%.1f", me.groundspeed));
+		setprop(me.PROP_PATH ~ "landing-data/g-force", sprintf("%.1f", me.gForce));
+		setprop(me.PROP_PATH ~ "landing-data/vertical-speed-fpm", sprintf("%.1f", me.verticalSpeed));
+		setprop(me.PROP_PATH ~ "landing-data/overshoot-m", sprintf("%.1f", me.overshoot));
+		setprop(me.PROP_PATH ~ "landing-data/offcenter-m", sprintf("%.1f", me.offcenter));
+		setprop(me.PROP_PATH ~ "landing-data/roll-deg", sprintf("%.1f", me.rollAngle));
+		setprop(me.PROP_PATH ~ "landing-data/pitch-deg", sprintf("%.1f", me.pitchAngle));
+		setprop(me.PROP_PATH ~ "landing-data/sideslip-deg", sprintf("%.1f", me.sideslipAngle));
+		setprop(me.PROP_PATH ~ "landing-data/airspeed-kt", sprintf("%.1f", me.airspeed));
+		setprop(me.PROP_PATH ~ "landing-data/groundspeed-kt", sprintf("%.1f", me.groundspeed));
 	},
 	
 	printLandingMessage: func() {
-		me.msg = "Landed! Vertical speed: " ~ sprintf("%.1f", me.fpm) ~ " FPM; Airspeed: " ~ sprintf("%.1f", me.airspeed) ~ " kts; Groundspeed: " ~ sprintf("%.1f", me.groundspeed) ~ " kts; G-Force: " ~ sprintf("%.1f", me.gforce) ~ ";\nBank angle: " ~ sprintf("%.1f", me.bankAngle) ~ " deg; Pitch angle: " ~ sprintf("%.1f", me.pitchAngle) ~ " deg; Sideslip angle: " ~ sprintf("%.1f", me.slipAngle) ~ " deg; Distance to target: " ~ sprintf("%.1f", me.overshoot) ~ " ft; Distance from centerline: " ~ sprintf("%.1f", me.offcenter) ~ " ft";
+		me.msg = "Landed! Vertical speed: " ~ sprintf("%.1f", me.verticalSpeed) ~ " FPM; Airspeed: " ~ sprintf("%.1f", me.airspeed) ~ " kts; Groundspeed: " ~ sprintf("%.1f", me.groundspeed) ~ " kts; G-Force: " ~ sprintf("%.1f", me.gForce) ~ ";\nBank angle: " ~ sprintf("%.1f", me.bankAngle) ~ " deg; Pitch angle: " ~ sprintf("%.1f", me.pitchAngle) ~ " deg; Sideslip angle: " ~ sprintf("%.1f", me.sideslipAngle) ~ " deg; Distance to target: " ~ sprintf("%.1f", me.overshoot) ~ " m; Distance from centerline: " ~ sprintf("%.1f", me.offcenter) ~ " m";
 		
 		logprint(LOG_ALERT, me.msg);
 		
@@ -303,21 +286,25 @@ var LandingChallenge = {
 		}
 		
 		if (getprop(me.PROP_PATH ~ "message-popup")) {
-			fgcommand("show-landing-notification-popup");
+			fgcommand("show-landing-notification");
 		}
 		
 		if (getprop(me.PROP_PATH ~ "announce-mp")) {
 			setprop("/sim/multiplay/chat", me.msg);
 		}
-		
-		# TODO: implement MPChat message sending
 	},
 }; # LandingChallenge Class
 
-###### dialog function calls #####
-challenge.setupChallenge = func() {
-	var ch = LandingChallenge.new(addonBasePath);	
-	ch.setupRunway();
-	ch.setupAirplane();
-	ch.setupLandingListeners();
+var landingChallenge = nil;
+
+var createLandingChallenge = func {
+	landingChallenge = LandingChallenge.new(addonBasePath);	
+	landingChallenge.setupRunway();
+	landingChallenge.setupAirplane();
+	landingChallenge.setupLandingListeners();
+}
+
+var removeLandingChallenge = func {
+	landingChallenge.del();
+	landingChallenge = nil;
 }

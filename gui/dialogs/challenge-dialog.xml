@@ -162,17 +162,17 @@
 					<halign>left</halign>
 					<label>Select Airport:</label>
 				</text>
-			<input>
-				<pref-width>100</pref-width>
-				<halign>left</halign>
-				<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/airport</property>
-				<label>Search for an airport</label>
-				<binding>
-					<command>dialog-apply</command>
-				</binding>
-				<key>Enter</key>
-				<live type="bool">true</live>
-			</input>
+				<input>
+					<pref-width>100</pref-width>
+					<halign>left</halign>
+					<property>/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/airport</property>
+					<label>Search for an airport</label>
+					<binding>
+						<command>dialog-apply</command>
+					</binding>
+					<key>Enter</key>
+					<live type="bool">true</live>
+				</input>
 				<airport-list>
 					<pref-height>200</pref-height>
 					<halign>fill</halign>
@@ -277,7 +277,7 @@
 			
 			<checkbox>
 				<halign>left</halign>
-				<label>Announce landing results on Multiplayer chat</label>
+				<label>Multiplayer chat</label>
 				<property type="bool">/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/announce-mp</property>
 			</checkbox>
 		</group>
@@ -291,7 +291,7 @@
 			<legend>Create challenge</legend>
 			<binding>
 				<command>nasal</command>
-				<script>LDG.challenge.setupChallenge();</script>
+				<script>LandingChallenge.createLandingChallenge();</script>
 			</binding>
 			<binding>
 				<command>dialog-apply</command>
@@ -307,7 +307,7 @@
 			</binding>
 			<binding>
 				<command>nasal</command>
-				<script>LDG.challenge.del(); LDG.challenge.setupChallenge();</script>
+				<script>LandingChallenge.removeLandingChallenge(); LandingChallenge.createLandingChallenge();</script>
 			</binding>
 		</button>
 		<button>
@@ -319,7 +319,8 @@
 		<button>
 			<legend>Remove Challenge</legend>
 			<binding>
-				<command>LDG.challenge.del();</command>
+				<command>nasal</command>
+				<script>LandingChallenge.removeLandingChallenge();</script>
 			</binding>
 		</button>
 	</group>

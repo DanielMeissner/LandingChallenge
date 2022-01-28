@@ -44,15 +44,15 @@ along with FlightGear.  If not, see <http://www.gnu.org/licenses/>.
                     <render-chalkmarkings>1</render-chalkmarkings>
                     <render-obstacle>0</render-obstacle>
                     <landing-data>
-                        <g-force type ="string">0</g-force>
-                        <fpm type = "string">0</fpm>
-                        <airspeed type="string">0</airspeed>
-                        <groundspeed type="string">0</groundspeed>
-                        <overshoot type="string">0</overshoot>
-                        <offcenter type="string">0</offcenter>
-                        <bank-angle type="string">0</bank-angle>
-                        <slip-angle type="string">0</slip-angle>
-                        <pitch-angle type="string">0</pitch-angle>
+                        <g-force type="string">1</g-force>
+                        <vertical-speed-fpm type="string">0</vertical-speed-fpm>
+                        <airspeed-kt type="string">0</airspeed-kt>
+                        <groundspeed-kt type="string">0</groundspeed-kt>
+                        <overshoot-m type="string">0</overshoot-m>
+                        <offcenter-m type="string">0</offcenter-m>
+                        <roll-deg type="string">0</roll-deg>
+                        <sideslip-deg type="string">0</sideslip-deg>
+                        <pitch-deg type="string">0</pitch-deg>
                     </landing-data>
                     <modes>
                         <mode-off type="int">1</mode-off>
@@ -60,8 +60,6 @@ along with FlightGear.  If not, see <http://www.gnu.org/licenses/>.
                         <mode-ga-competition type="int">0</mode-ga-competition>
                         <mode-ils-training type="int">0</mode-ils-training>
                     </modes>
-                    <!-- needed to ensure we don't get a white box instead of the landingNotification-->
-                    <old-index>-1</old-index>
                 </addon-devel>
             </org.flightgear.addons.landing-challenge>
         </by-id>
