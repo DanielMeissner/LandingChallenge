@@ -1,33 +1,28 @@
-var LandingNotification = 
-{
-		SHOW_TIME: 10.0,
-		SLICE: 17,
-		MARGIN: 10,
+var LandingNotification = {
+	SHOW_TIME: 10.0,
+	SLICE: 17,
+	MARGIN: 10,
 
-	new: func
-	{
-		var m = {
+	new: func {
+		var obj = {
 			parents: [LandingNotification, canvas.PropertyElement.new(["/sim/gui/canvas", "window"], nil)],
 			_title: "",
 		};
 
-		m.setInt("size[0]", 500);
-		m.setInt("size[1]", 400);
-		m.setBool("visible", 0);
-		m.setInt("z-index", canvas.gui.STACK_INDEX["always-on-top"]);
+		obj.setInt("size[0]", 500);
+		obj.setInt("size[1]", 400);
+		obj.setBool("visible", 0);
+		obj.setInt("z-index", canvas.gui.STACK_INDEX["always-on-top"]);
 
-		m._hideTimer = maketimer(m.SHOW_TIME, m, LandingNotification._hideTimeout);
-		m._hideTimer.singleShot = 1;
+		obj._hideTimer = maketimer(m.SHOW_TIME, obj, LandingNotification._hideTimeout);
+		obj._hideTimer.singleShot = 1;
 
-		setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index", m._node.getIndex());
-		
 		return m;
 	},
 
 	# Destructor
 	del: func {
-		logprint(LOG_DEBUG, "Deleting landing notification");
-		call(me.parents[1].del, nil, nil, var err = []);
+		me.parents[1].del();
 		if (me["_canvas"] != nil) {
 			me._canvas.del();
 		}
@@ -143,23 +138,15 @@ var LandingNotification =
 	}
 };
 
-var landingNotificationCanvas = nil;
+var landingNotification = nil;
 
 var showLandingNotification = func() {
-	logprint(LOG_DEBUG, "Showing landing notification");
-	
-	# if there was a canvas node left behind due to plugin reload, delete it
-	if (var oldIndex = getprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index") > -1) {
-		props.getNode("/sim/gui/canvas/window[" ~ oldIndex ~ "]").remove();
-		setprop("/addons/by-id/org.flightgear.addons.landing-challenge/addon-devel/old-index", -1);
+	if (landingNotification == nil) {
+		landingNotification = LandingNotification.new();
+		landingNotification._createCanvas();
 	}
-	
-	if (landingNotificationCanvas == nil) {
-		landingNotificationCanvas = LandingNotification.new();
-		landingNotificationCanvas._createCanvas();
-	}
-	landingNotificationCanvas._updateBounds();
-	landingNotificationCanvas.show();
+	landingNotification._updateBounds();
+	landingNotification.show();
 }
 
 addcommand("show-landing-notification-popup", showLandingNotification);
