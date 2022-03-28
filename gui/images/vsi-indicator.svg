@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+	<g id="needle" transform="matrix(3.64 0 0 3.64 -4.83 1.17)">
+		<path id="needle-visible" d="m9.79 7.94-6.35 0.529 6.35 0.529z" style="fill: #000000; stroke-linejoin: round; stroke-width: 0.265; stroke: #000000;"/>
+		<path id="needle-invisible" d="m9.79 7.94v1.06l7.14-0.529z" style="fill: none"/>
+	</g>
+	<g id="face">
+		<path id="border" transform="rotate(45)" d="m75.3 9.9e-5a30 30 0 0 1-18.5 27.7 30 30 0 0 1-32.7-6.5 30 30 0 0 1-6.5-32.7 30 30 0 0 1 27.7-18.5v30z" style="fill: none; stroke-width: 2; stroke: #000000;"/>
+		<path id="mark-0" d="m1 32h8" style="fill: none; stroke-width: 2; stroke: #000000"/>
+		<path id="mark-5-positive" d="m10.1 10.1 5.66 5.66" style="fill: none; stroke-width: 2; stroke: #000000"/>
+		<path id="mark-5-negative" d="m10.1 53.9 5.66-5.66" style="fill: none; stroke-width: 2; stroke: #000000"/>
+		<path id="mark-10-positive" d="m32 1 5e-6 8" style="fill:none; stroke-width: 2; stroke: #000000"/>
+		<path id="mark-10-negative" d="m32 63-5e-6 -8" style="fill: none; stroke-width: 2; stroke: #000000"/>
+		<circle id="center" cx="32" cy="32" r="3" style="fill: #000000;"/>
+	</g>
+</svg>

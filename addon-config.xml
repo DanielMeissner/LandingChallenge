@@ -30,19 +30,29 @@ along with FlightGear.  If not, see <http://www.gnu.org/licenses/>.
         <by-id>
             <org.flightgear.addons.landing-challenge>
                 <addon-devel>
-                    <airport type="string">EDHE</airport>
+                    <airport type="string">Uetersen (EDHE)</airport>
                     <runway type="string">09</runway>
                     <target-dist-m type="int">90</target-dist-m>
-                    <markings-offset-m type="int">0.5</markings-offset-m>
                     <landed>0</landed>
                     <altTrig>0</altTrig>
+                    <message>1</message>
+                    <message-popup>1</message-popup>
+                    <announce-mp>1</announce-mp>
+                    <chalkmarkings-pitch-deg>0</chalkmarkings-pitch-deg>
+                    <chalkmarkings-offset-m>0</chalkmarkings-offset-m>
+                    <render-cones>1</render-cones>
+                    <render-chalkmarkings>1</render-chalkmarkings>
+                    <render-obstacle>0</render-obstacle>
                     <landing-data>
-                        <g-force type ="string"></g-force>
-                        <fpm type = "string"></fpm>
-                        <overshoot type="string"></overshoot>
-                        <offcenter type="string"></offcenter>
-                        <bank-angle type="string"></bank-angle>
-                        <slip-angle type="string"></slip-angle>
+                        <g-force type="string">1</g-force>
+                        <vertical-speed-fpm type="string">0</vertical-speed-fpm>
+                        <airspeed-kt type="string">0</airspeed-kt>
+                        <groundspeed-kt type="string">0</groundspeed-kt>
+                        <overshoot-m type="string">0</overshoot-m>
+                        <offcenter-m type="string">0</offcenter-m>
+                        <roll-deg type="string">0</roll-deg>
+                        <sideslip-deg type="string">0</sideslip-deg>
+                        <pitch-deg type="string">0</pitch-deg>
                     </landing-data>
                     <modes>
                         <mode-off type="int">1</mode-off>
