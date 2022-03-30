@@ -35,7 +35,7 @@
 # Based on landing-rate addon by RenanMsV (https://github.com/RenanMsV/landing_rate)
 #
 
-var namespace = "LDG";
+var namespace = "LandingChallenge";
 
 var unload = func(addon) {
 	logprint(LOG_DEBUG, "Unloading landing challenge plugin");
