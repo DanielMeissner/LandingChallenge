@@ -37,6 +37,17 @@
 
 var namespace = "LandingChallenge";
 
+var main = func(addon) {
+	logprint(LOG_INFO, "Landing-Challenge addon initialized from path ", addon.basePath);
+	
+	io.load_nasal(addon.basePath ~ "/landingChallenge.nas", namespace);
+	io.load_nasal(addon.basePath ~ "/landingNotification.nas", namespace);
+	io.load_nasal(addon.basePath ~ "/dataDialog.nas", namespace);
+	globals[namespace].addonBasePath = addon.basePath;
+	globals[namespace].addonNode = addon.node.getNode("addon-devel");
+	
+}
+
 var unload = func(addon) {
 	logprint(LOG_DEBUG, "Unloading landing challenge plugin");
 	
@@ -53,12 +64,3 @@ var unload = func(addon) {
 	removecommand("show-landing-data-dialog");
 }
 
-var main = func(addon) {
-	logprint(LOG_INFO, "Landing-Challenge addon initialized from path ", addon.basePath);
-	
-	io.load_nasal(addon.basePath ~ "/landingChallenge.nas", namespace);
-	io.load_nasal(addon.basePath ~ "/landingNotification.nas", namespace);
-	io.load_nasal(addon.basePath ~ "/dataDialog.nas", namespace);
-	globals[namespace].addonBasePath = addon.basePath;
-	
-}

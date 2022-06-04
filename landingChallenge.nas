@@ -255,7 +255,6 @@ var LandingChallenge = {
 		me.sideslipAngle = getprop("/orientation/side-slip-deg");
 		me.landingPos = geo.aircraft_position();
 		
-		debug.dump(me.tgt_pos);
 		var absdist = me.landingPos.distance_to(me.tgt_pos);
 		
 		var course = me.landingPos.course_to(me.tgt_pos);
